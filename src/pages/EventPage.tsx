@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { Event } from "../components/types";
 import { getEvent } from "../services/events";
 
@@ -19,7 +19,7 @@ const EventPage = () => {
     <div>
       <div>{event.name}</div>
       <br />
-      <div>{event.datetime}</div>
+      <div>{new Date(event.datetime).toLocaleDateString("FI-fi")}</div>
       <br />
       <div>{event.description}</div>
     </div>

@@ -7,7 +7,7 @@ type Props = {
 };
 const Card = (props: Props) => {
   const { id, name, datetime } = props.event;
-  const date = new Date(datetime.toString());
+  const date = new Date(datetime);
 
   return (
     <div className="flex flex-col justify-between p-4 bg-gray-200 rounded shadow w-96">
