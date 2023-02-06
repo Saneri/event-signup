@@ -1,7 +1,7 @@
 // TODO: create better typings for these DTOs
 
 export type Event = {
-  id: string;
+  id?: string;
   name: String;
   description: String;
   datetime: String;

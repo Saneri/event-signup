@@ -17,7 +17,7 @@ const BrowseEventsPage = () => {
           Create new event
         </button>
       </Link>
-      <EventList events={data} />
+      {data == null ? <h1>No Events yet</h1> : <EventList events={data} />}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { addEvent } from "../services/events";
 import Button from "./common/Button";
+import * as yup from "yup";
 
 const EventForm = () => {
   const navigate = useNavigate();
@@ -21,6 +22,10 @@ const EventForm = () => {
         resetForm();
         navigate("/");
       }}
+      validationSchema={yup.object({
+        name: yup.string().required(),
+        datetime: yup.string().required(),
+      })}
     >
       {({ handleSubmit, handleChange }) => (
         <form
