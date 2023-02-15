@@ -43,8 +43,18 @@
       "participants": [
         {
           "name": "santeri",
-          "attending": "maybe",
+          "attending": 0,
           "signupTime": "2023-30-03T12:00"
+        },
+        {
+          "name": "alan",
+          "attending": 1,
+          "signupTime": "2021-30-03T12:00"
+        },
+        {
+          "name": "eki",
+          "attending": 2,
+          "signupTime": "2023-30-03T13:00"
         }
       ]
     }

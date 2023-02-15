@@ -1,14 +1,17 @@
-// TODO: create better typings for these DTOs
-
 export type Event = {
-  id?: string;
+  id?: number;
   name: String;
   description: String;
-  datetime: String;
+  datetime: Date;
 };
 
 export type Participant = {
   name: string;
-  attending: string;
-  answerTime: String;
+  attending: number;
+  answerTime: Date;
+};
+
+export type Participants = {
+  id?: number;
+  participants: Participant[];
 };
