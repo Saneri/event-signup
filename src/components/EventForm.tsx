@@ -9,7 +9,7 @@ const EventForm = () => {
 
   const initialValues = {
     name: "",
-    datetime: "",
+    datetime: new Date(),
     description: "",
   };
 

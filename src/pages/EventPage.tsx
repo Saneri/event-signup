@@ -1,4 +1,5 @@
 import { useLoaderData } from "react-router-dom";
+import AttendeeList from "../components/AttendeeList";
 import { Event, Participant } from "../components/types";
 import { getEvent } from "../services/events";
 import { getParicipants } from "../services/participants";
@@ -27,15 +28,7 @@ const EventPage = () => {
       <div>{event.description}</div>
       <br />
       <h2>Attendees</h2>
-      {participants.length ? (
-        <ul className="list-disc list-inside">
-          {participants.map((participant) => {
-            return <li key={participant.name}>{participant.name}</li>;
-          })}
-        </ul>
-      ) : (
-        <div>No participants yet</div>
-      )}
+      <AttendeeList participants={participants} />
     </div>
   );
 };
