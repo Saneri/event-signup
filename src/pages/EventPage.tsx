@@ -1,4 +1,5 @@
 import { useLoaderData } from "react-router-dom";
+import AttendeeForm from "../components/AttendeeForm";
 import AttendeeList from "../components/AttendeeList";
 import { Event, Participant } from "../components/types";
 import { getEvent } from "../services/events";
@@ -29,6 +30,10 @@ const EventPage = () => {
       <br />
       <h2>Attendees</h2>
       <AttendeeList participants={participants} />
+      <br />
+      <div className=" bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <AttendeeForm />
+      </div>
     </div>
   );
 };
