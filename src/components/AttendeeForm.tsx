@@ -1,5 +1,6 @@
 import { Formik } from "formik";
 import { useState } from "react";
+import * as yup from "yup";
 import Button from "./common/Button";
 
 const AttendeeForm = () => {
@@ -22,6 +23,12 @@ const AttendeeForm = () => {
         resetForm();
         setSubmitted(true);
       }}
+      validationSchema={yup.object({
+        name: yup
+          .string()
+          .required()
+          .min(3, "must be at least 3 characters long"),
+      })}
     >
       {({ handleSubmit, handleChange }) => (
         <form className="flex flex-col" onSubmit={handleSubmit}>
