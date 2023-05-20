@@ -12,12 +12,29 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: 'hello world',
-            }),
-        };
+        switch (event.httpMethod) {
+            case 'GET':
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify({
+                        message: 'hello get',
+                    }),
+                };
+            case 'POST':
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify({
+                        message: 'hello post',
+                    }),
+                };
+            default:
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({
+                        message: `HTTP method '${event.httpMethod}' not supported`,
+                    }),
+                };
+        }
     } catch (err) {
         console.log(err);
         return {
