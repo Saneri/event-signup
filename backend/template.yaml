@@ -55,6 +55,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
     Properties:
+      TableName: event
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S

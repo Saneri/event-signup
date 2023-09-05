@@ -3,7 +3,7 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 
 const dynamo = new DynamoDBClient({
     endpoint: 'http://localhost:8000',
-    region: 'eu-west-1',
+    region: 'localhost',
 });
 const client = DynamoDBDocument.from(dynamo);
 
@@ -27,9 +27,26 @@ const createTable = async (tableName: string) => {
     }
 };
 
-createTable('YourTableName');
+const populateEventTable = async () => {
+    const itemToPut = {
+        TableName: 'event',
+        Item: {
+            id: '1',
+            name: 'synttärit',
+        },
+    };
 
-(async () => {
-    const result = await client.send(new ListTablesCommand({}));
-    console.log(result);
-})();
+    try {
+        const result = await client.put(itemToPut);
+        console.log('Item added successfully:', result);
+    } catch (error) {
+        console.error('Error adding item to DynamoDB:', error);
+    }
+};
+
+const main = async () => {
+    await createTable('event');
+    await populateEventTable();
+};
+
+main();

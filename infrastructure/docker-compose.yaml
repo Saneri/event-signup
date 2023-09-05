@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   dynamodb:
-    image: amazon/dynamodb-local:latest
+    image: instructure/dynamo-local-admin:latest
     container_name: dynamodb-local
     ports:
       - "8000:8000"
