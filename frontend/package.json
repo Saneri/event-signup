@@ -20,7 +20,7 @@
     "yup": "^1.0.0"
   },
   "scripts": {
-    "start": "vite & npm run mockdb",
+    "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "mockdb": "json-server -p3001 --watch db.json"
