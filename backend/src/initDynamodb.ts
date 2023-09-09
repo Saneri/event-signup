@@ -1,9 +1,5 @@
-import { CreateTableCommand, DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
-
-const dynamo = new DynamoDBClient({
-    endpoint: 'http://localhost:8000',
-    region: 'localhost',
-});
+import { CreateTableCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import dynamo from './dynamodb/client.js';
 
 const createTable = async (tableName: string) => {
     const params = {
