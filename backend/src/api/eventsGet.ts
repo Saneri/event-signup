@@ -12,21 +12,17 @@ const eventsGet = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyRe
 
         if (!result.Items) {
             return {
-                statusCode: 404,
-                body: JSON.stringify({
-                    message: 'No events found',
-                }),
+                statusCode: 200,
+                body: '[]',
             };
         }
 
-        const data = result.Items.map((item) => {
+        const data: Record<string, any> = result.Items.map((item) => {
             const transformedItem: Record<string, any> = {};
-            for (const key in item) {
-                if (item.hasOwnProperty(key)) {
-                    transformedItem[key] = item[key].S;
-                }
-                return transformedItem;
-            }
+            Object.keys(item).forEach((key) => {
+                transformedItem[key] = item[key].S;
+            });
+            return transformedItem;
         });
 
         return {
