@@ -37,7 +37,7 @@ const populateEventTable = async () => {
     const command = new PutItemCommand(itemToPut);
 
     try {
-        const result = await dynamo.send(command);
+        await dynamo.send(command);
         console.log('Item added successfully');
     } catch (error) {
         console.error('Error adding item to DynamoDB:', error);
