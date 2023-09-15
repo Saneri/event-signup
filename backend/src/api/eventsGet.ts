@@ -1,5 +1,6 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { getAllEvents } from './../dynamodb/client.js';
+import { apiResponse } from './response.js';
 
 const eventsGet = async (): Promise<APIGatewayProxyResult> => {
     try {
@@ -20,18 +21,10 @@ const eventsGet = async (): Promise<APIGatewayProxyResult> => {
             return transformedItem;
         });
 
-        return {
-            statusCode: 200,
-            body: JSON.stringify(data),
-        };
+        return apiResponse(200, data);
     } catch (err) {
-        console.log(err);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({
-                message: 'some error happened',
-            }),
-        };
+        console.error(err);
+        return apiResponse(500);
     }
 };
 

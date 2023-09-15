@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { postEvent } from '../dynamodb/client';
+import { apiResponse } from './response';
 import { EventPostRequestBody } from './types';
 
 const validateEventBody = (requestBody: string | null): EventPostRequestBody | null => {
@@ -19,23 +20,13 @@ const eventsPost = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyR
     try {
         const requestBody = validateEventBody(event.body);
         if (!requestBody) {
-            return { statusCode: 400, body: JSON.stringify({ message: 'Bad Request' }) };
+            return apiResponse(400);
         }
-
         await postEvent(requestBody);
-
-        return {
-            statusCode: 201,
-            body: JSON.stringify({ message: 'Created' }),
-        };
+        return apiResponse(201);
     } catch (err) {
-        console.log(err);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({
-                message: 'Internal Server Error',
-            }),
-        };
+        console.error(err);
+        return apiResponse(500);
     }
 };
 

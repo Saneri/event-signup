@@ -11,8 +11,9 @@
     },
     "type": "module",
     "dependencies": {
+        "@aws-sdk/client-dynamodb": "^3.335.0",
         "esbuild": "^0.14.14",
-        "@aws-sdk/client-dynamodb": "^3.335.0"
+        "http-status-codes": "^2.2.0"
     },
     "devDependencies": {
         "@types/aws-lambda": "^8.10.92",
