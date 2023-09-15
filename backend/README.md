@@ -7,6 +7,8 @@
 
 ## initialize database
 
+[!IMPORTANT] You need to have dynamodb running locally. See: [infrastructure](../infrastructure/README.md)
+
 ```shell
 cd src
 nvm use
