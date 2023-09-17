@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
 import BrowseEventsPage from "./pages/BrowseEventsPage";
 import CreateEventsPage from "./pages/CreateEventPage";
@@ -10,18 +10,22 @@ import EventPage, { eventLoader } from "./pages/EventPage";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <BrowseEventsPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/create",
-    element: <CreateEventsPage />,
-  },
-  {
-    path: "/events/:id",
-    element: <EventPage />,
-    loader: eventLoader,
+    errorElement: <ErrorPage></ErrorPage>,
+    children: [
+      {
+        path: "/",
+        element: <BrowseEventsPage />,
+      },
+      {
+        path: "/create",
+        element: <CreateEventsPage />,
+      },
+      {
+        path: "/events/:id",
+        element: <EventPage />,
+        loader: eventLoader,
+      },
+    ],
   },
 ]);
 
