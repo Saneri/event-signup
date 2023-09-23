@@ -1,4 +1,4 @@
-import { CreateTableCommand, PutItemCommand, QueryCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
+import { CreateTableCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import dynamo from './dynamodb/client.js';
 
 const DYNAMO_TABLE_NAME = 'eventSignupTable';

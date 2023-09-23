@@ -5,12 +5,7 @@ import { EventPostRequestBody } from './types';
 
 const validateEventBody = (requestBody: string | null): EventPostRequestBody | null => {
     const body = JSON.parse(requestBody || '{}');
-    if (
-        typeof body.id !== 'string' ||
-        typeof body.name !== 'string' ||
-        isNaN(Date.parse(body.datetime)) ||
-        typeof body.description !== 'string'
-    ) {
+    if (typeof body.name !== 'string' || isNaN(Date.parse(body.datetime)) || typeof body.description !== 'string') {
         return null;
     }
     return body;
