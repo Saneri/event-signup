@@ -15,6 +15,7 @@ Resources:
   getEvents:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: event-signup-backend-getEvents-dev
       CodeUri: src/
       Handler: handler.eventsGetHandler
       Runtime: nodejs18.x
@@ -37,6 +38,7 @@ Resources:
   addEvent:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: event-signup-backend-postEvents-dev
       CodeUri: src/
       Handler: handler.eventsPostHandler
       Runtime: nodejs18.x
