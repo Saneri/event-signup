@@ -12,6 +12,23 @@ Globals:
       AllowOrigin: "'*'"
 
 Resources:
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      Auth:
+        ApiKeyRequired: true
+  ApiUsagePlan:
+    Type: "AWS::ApiGateway::UsagePlan"
+    Properties:
+      ApiStages:
+        - ApiId: !Ref Api
+          Stage: dev
+      Description: !Sub ${AWS::StackName} usage plan
+      Quota:
+        Limit: 1000
+        Period: MONTH
+      UsagePlanName: !Sub ${AWS::StackName}-usage-plan
   getEvents:
     Type: AWS::Serverless::Function
     Properties:
@@ -25,6 +42,7 @@ Resources:
         ApiEvent:
           Type: Api
           Properties:
+            RestApiId: !Ref Api
             Path: /events
             Method: get
     Metadata:
@@ -48,6 +66,7 @@ Resources:
         ApiEvent:
           Type: Api
           Properties:
+            RestApiId: !Ref Api
             Path: /events
             Method: post
     Metadata:
