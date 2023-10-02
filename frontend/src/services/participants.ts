@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Participant, Participants } from "../components/types";
 
-const URL = "http://localhost:3001";
+const URL = import.meta.env.VITE_API_URL;
 
 export const getParicipants = async (
   id: number

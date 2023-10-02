@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "vite build --mode dev",
     "serve": "vite preview",
     "mockdb": "json-server -p3001 --watch db.json"
   },
