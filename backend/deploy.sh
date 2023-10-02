@@ -5,4 +5,5 @@ sam deploy  \
     --profile santeri-dev \
     --capabilities CAPABILITY_IAM \
     --no-confirm-changeset \
-    --s3-bucket event-signup-backend-sam
+    --s3-bucket event-signup-backend-sam \
+    --parameter-overrides Env=prod

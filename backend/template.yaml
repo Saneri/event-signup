@@ -4,12 +4,17 @@ Description: SAM Template for backend
 
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 29
   Api:
     Cors:
       AllowMethods: "'GET,POST,OPTIONS'"
       AllowHeaders: "'content-type'"
       AllowOrigin: "'*'"
+
+Parameters:
+  Env:
+    Type: String
+    Default: prod
 
 Resources:
   Api:
@@ -45,6 +50,17 @@ Resources:
             RestApiId: !Ref Api
             Path: /events
             Method: get
+      Environment:
+        Variables:
+          ENV: !Ref Env
+      Policies:
+        - Statement:
+            - Sid: dynamoGetEventsPolicy
+              Effect: Allow
+              Action:
+                - dynamodb:scan
+                - dynamodb:Query
+              Resource: "*"
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -69,6 +85,16 @@ Resources:
             RestApiId: !Ref Api
             Path: /events
             Method: post
+      Environment:
+        Variables:
+          ENV: !Ref Env
+      Policies:
+        - Statement:
+            - Sid: dynamoPostEventsPolicy
+              Effect: Allow
+              Action:
+                - dynamodb:PutItem
+              Resource: "*"
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
