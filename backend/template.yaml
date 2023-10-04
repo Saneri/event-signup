@@ -5,11 +5,6 @@ Description: SAM Template for backend
 Globals:
   Function:
     Timeout: 29
-  Api:
-    Cors:
-      AllowMethods: "'GET,POST,OPTIONS'"
-      AllowHeaders: "'content-type'"
-      AllowOrigin: "'*'"
 
 Parameters:
   Env:
@@ -21,8 +16,10 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: dev
-      Auth:
-        ApiKeyRequired: true
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Api-Key'"
+        AllowOrigin: "'*'" # make this more strict
   ApiUsagePlan:
     Type: "AWS::ApiGateway::UsagePlan"
     Properties:
@@ -50,6 +47,8 @@ Resources:
             RestApiId: !Ref Api
             Path: /events
             Method: get
+            Auth:
+              ApiKeyRequired: true
       Environment:
         Variables:
           ENV: !Ref Env
@@ -85,6 +84,8 @@ Resources:
             RestApiId: !Ref Api
             Path: /events
             Method: post
+            Auth:
+              ApiKeyRequired: true
       Environment:
         Variables:
           ENV: !Ref Env

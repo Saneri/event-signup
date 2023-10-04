@@ -7,10 +7,7 @@ const eventsGet = async (): Promise<APIGatewayProxyResult> => {
         const events = await getAllEvents();
 
         if (!events) {
-            return {
-                statusCode: 200,
-                body: '[]',
-            };
+            return apiResponse(200, []);
         }
 
         const data: Record<string, any> = events.map((item) => {
