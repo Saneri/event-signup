@@ -1,7 +1,7 @@
 export type Event = {
-  id?: number;
-  name: String;
-  description: String;
+  id?: string;
+  name: string;
+  description: string;
   datetime: Date;
 };
 
