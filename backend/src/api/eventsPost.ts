@@ -1,9 +1,9 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { postEvent } from '../dynamodb/client';
 import { apiResponse } from './response';
-import { EventPostRequestBody } from './types';
+import { Event } from './types';
 
-const validateEventBody = (requestBody: string | null): EventPostRequestBody | null => {
+const validateEventBody = (requestBody: string | null): Event | null => {
     const body = JSON.parse(requestBody || '{}');
     if (typeof body.name !== 'string' || isNaN(Date.parse(body.datetime)) || typeof body.description !== 'string') {
         return null;
