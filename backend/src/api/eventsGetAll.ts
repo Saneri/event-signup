@@ -1,5 +1,5 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { getAllEvents } from './../dynamodb/client.js';
+import { getAllEvents } from '../dynamodb/client.js';
 import { apiResponse } from './response.js';
 
 const eventsGet = async (): Promise<APIGatewayProxyResult> => {

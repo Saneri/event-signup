@@ -36,7 +36,7 @@ Resources:
     Properties:
       FunctionName: event-signup-backend-getEvents-dev
       CodeUri: src/
-      Handler: handler.eventsGetHandler
+      Handler: handler.eventsGetAllHandler
       Runtime: nodejs18.x
       Architectures:
         - x86_64
@@ -54,7 +54,7 @@ Resources:
           ENV: !Ref Env
       Policies:
         - Statement:
-            - Sid: dynamoGetEventsPolicy
+            - Sid: dynamoGetAllEventsPolicy
               Effect: Allow
               Action:
                 - dynamodb:scan
