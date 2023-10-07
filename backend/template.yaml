@@ -57,7 +57,7 @@ Resources:
             - Sid: dynamoGetAllEventsPolicy
               Effect: Allow
               Action:
-                - dynamodb:scan
+                - dynamodb:Scan
                 - dynamodb:Query
               Resource: "*"
     Metadata:
@@ -68,6 +68,43 @@ Resources:
         Sourcemap: true
         EntryPoints:
           - handler.ts
+  getEventById:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: event-signup-backend-getEventById-dev
+      CodeUri: src/
+      Handler: handler.eventsGetByIdHandler
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /events/{id}
+            Method: get
+            Auth:
+              ApiKeyRequired: true
+      Environment:
+        Variables:
+          ENV: !Ref Env
+      Policies:
+        - Statement:
+            - Sid: dynamoGetAllEventsPolicy
+              Effect: Allow
+              Action:
+                - dynamodb:GetItem
+              Resource: "*"
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - handler.ts
+
   addEvent:
     Type: AWS::Serverless::Function
     Properties:

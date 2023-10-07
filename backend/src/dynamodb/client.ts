@@ -1,6 +1,6 @@
-import { AttributeValue, DynamoDBClient, PutItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
+import { AttributeValue, DynamoDBClient, GetItemCommand, PutItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { randomUUID } from 'crypto';
-import { EventPostRequestBody } from '../api/types';
+import { Event } from '../api/types';
 
 const DYNAMO_TABLE_NAME = 'eventSignupTable';
 
@@ -24,7 +24,20 @@ export const getAllEvents = async (): Promise<Record<string, AttributeValue>[] |
     return result.Items;
 };
 
-export const postEvent = async (body: EventPostRequestBody) => {
+export const getEventById = async (id: string): Promise<Record<string, AttributeValue> | undefined> => {
+    const params = {
+        TableName: DYNAMO_TABLE_NAME,
+        Key: {
+            PK: { S: `event_${id}` },
+            SK: { S: 'meta' },
+        },
+    };
+    const queryCommand = new GetItemCommand(params);
+    const result = await client.send(queryCommand);
+    return result.Item;
+};
+
+export const postEvent = async (body: Event) => {
     const itemToPut = {
         TableName: DYNAMO_TABLE_NAME,
         Item: {
