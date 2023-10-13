@@ -2,7 +2,7 @@ export type Event = {
   id?: string;
   name: string;
   description: string;
-  datetime: Date;
+  datetime: string;
 };
 
 export type Participant = {
