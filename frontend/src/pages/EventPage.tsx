@@ -4,6 +4,7 @@ import AttendeeList from "../components/AttendeeList";
 import { Event, Participant } from "../components/types";
 import { getEvent } from "../services/events";
 import { getParicipants } from "../services/participants";
+import { formatDateAndTime } from "../utils/date";
 
 type Args = {
   params: {
@@ -21,10 +22,10 @@ const EventPage = () => {
   const event = arr[0] as Event;
   const participants = arr[1] as Participant[];
   return (
-    <div>
-      <div>{event.name}</div>
+    <div className="m-8 ">
+      <h1 className="text-4xl font-extrabold">{event.name}</h1>
       <br />
-      <div>{new Date(event.datetime).toLocaleDateString("FI-fi")}</div>
+      <div>{formatDateAndTime(event.datetime)}</div>
       <br />
       <div>{event.description}</div>
       <br />
