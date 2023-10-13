@@ -1,21 +1,21 @@
 import { Link } from "react-router-dom";
+import { formatDateAndTime } from "../../utils/date";
 import { Event } from "../types";
 import Button from "./Button";
 
 type Props = {
   event: Event;
 };
+
 const Card = (props: Props) => {
   const { id, name, datetime } = props.event;
-  const date = new Date(datetime);
 
   return (
     <div className="flex flex-col justify-between p-4 bg-gray-200 rounded shadow w-96">
       <div>
         <div className="text-xl font-bold">{name}</div>
         <div>
-          <b>Time:</b> {date.toLocaleDateString("fi-FI")}{" "}
-          {date.toLocaleTimeString("en-EN")}
+          <b>Time:</b> {formatDateAndTime(datetime)}
         </div>
       </div>
       <div className="mt-10">

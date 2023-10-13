@@ -23,7 +23,8 @@
     "start": "vite",
     "build": "vite build --mode dev",
     "serve": "vite preview",
-    "mockdb": "json-server -p3001 --watch db.json"
+    "mockdb": "json-server -p3001 --watch db.json",
+    "test": "vitest --run"
   },
   "browserslist": {
     "production": [
@@ -40,6 +41,7 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.4",
     "autoprefixer": "^10.4.13",
-    "vite": "^4.2.1"
+    "vite": "^4.4.11",
+    "vitest": "^0.34.6"
   }
 }
