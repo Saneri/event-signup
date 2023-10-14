@@ -2,6 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import eventsGetAll from './api/eventsGetAll';
 import eventsPost from './api/eventsPost';
 import eventsGetById from './api/eventsGetById';
+import attendeesGetAll from './api/attendeesGetAll';
 
 /**
  *
@@ -23,4 +24,8 @@ export const eventsPostHandler = async (event: APIGatewayProxyEvent): Promise<AP
 
 export const eventsGetByIdHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     return eventsGetById(event);
+};
+
+export const attendeesGetAllHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    return attendeesGetAll(event);
 };

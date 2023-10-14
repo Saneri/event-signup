@@ -5,6 +5,7 @@ Description: SAM Template for backend
 Globals:
   Function:
     Timeout: 29
+    Runtime: nodejs18.x
 
 Parameters:
   Env:
@@ -37,7 +38,6 @@ Resources:
       FunctionName: event-signup-backend-getEvents-dev
       CodeUri: src/
       Handler: handler.eventsGetAllHandler
-      Runtime: nodejs18.x
       Architectures:
         - x86_64
       Events:
@@ -74,7 +74,6 @@ Resources:
       FunctionName: event-signup-backend-getEventById-dev
       CodeUri: src/
       Handler: handler.eventsGetByIdHandler
-      Runtime: nodejs18.x
       Architectures:
         - x86_64
       Events:
@@ -111,7 +110,6 @@ Resources:
       FunctionName: event-signup-backend-postEvents-dev
       CodeUri: src/
       Handler: handler.eventsPostHandler
-      Runtime: nodejs18.x
       Architectures:
         - x86_64
       Events:
@@ -132,6 +130,42 @@ Resources:
               Effect: Allow
               Action:
                 - dynamodb:PutItem
+              Resource: "*"
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - handler.ts
+  getAllAttendees:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: event-signup-backend-getAttendees-dev
+      CodeUri: src/
+      Handler: handler.attendeesGetAllHandler
+      Architectures:
+        - x86_64
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /attendees/{id}
+            Method: get
+            Auth:
+              ApiKeyRequired: true
+      Environment:
+        Variables:
+          ENV: !Ref Env
+      Policies:
+        - Statement:
+            - Sid: dynamoPostEventsPolicy
+              Effect: Allow
+              Action:
+                - dynamodb:Scan
+                - dynamodb:Query
               Resource: "*"
     Metadata:
       BuildMethod: esbuild

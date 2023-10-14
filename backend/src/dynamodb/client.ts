@@ -55,4 +55,19 @@ export const postEvent = async (body: Event) => {
     await client.send(command);
 };
 
+export const getAllAttendees = async (eventId: string): Promise<Record<string, AttributeValue>[] | undefined> => {
+    // scan takes too much time, use query (with index) instead
+    const params = {
+        TableName: DYNAMO_TABLE_NAME,
+        FilterExpression: 'PK = :pk AND SK = :sk',
+        ExpressionAttributeValues: {
+            ':pk': { S: eventId },
+            ':sk': { S: 'attendee' },
+        },
+    };
+    const queryCommand = new ScanCommand(params);
+    const result = await client.send(queryCommand);
+    return result.Items;
+};
+
 export default client;
