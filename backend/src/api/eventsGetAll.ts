@@ -12,13 +12,13 @@ const eventsGet = async (): Promise<APIGatewayProxyResult> => {
             return apiResponse(200, []);
         }
 
-        const data: Record<string, any> = events.map((item) => {
-            const transformedItem: Record<string, any> = {};
-            Object.keys(item).forEach((key) => {
-                transformedItem[key] = item[key].S;
-            });
-            transformedItem.id = transformedItem.PK.match(FIND_ID_REGEX)[1];
-            return transformedItem;
+        const data: Record<string, any> = events.map((event) => {
+            return {
+                name: event.name.S,
+                description: event.description.S,
+                datetime: event.datetime.S,
+                id: event.PK.S?.match(FIND_ID_REGEX)?.[1],
+            };
         });
 
         return apiResponse(200, data);
