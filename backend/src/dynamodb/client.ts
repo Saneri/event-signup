@@ -15,7 +15,7 @@ export const getAllEvents = async (): Promise<Record<string, AttributeValue>[] |
         TableName: DYNAMO_TABLE_NAME,
         FilterExpression: 'begins_with(PK,:pk) AND SK = :sk',
         ExpressionAttributeValues: {
-            ':pk': { S: 'event' },
+            ':pk': { S: 'event_' },
             ':sk': { S: 'meta' },
         },
     };
@@ -59,10 +59,10 @@ export const getAllAttendees = async (eventId: string): Promise<Record<string, A
     // scan takes too much time, use query (with index) instead
     const params = {
         TableName: DYNAMO_TABLE_NAME,
-        FilterExpression: 'PK = :pk AND SK = :sk',
+        FilterExpression: 'PK = :pk AND begins_with(SK,:sk)',
         ExpressionAttributeValues: {
-            ':pk': { S: eventId },
-            ':sk': { S: 'attendee' },
+            ':pk': { S: `event_${eventId}` },
+            ':sk': { S: 'attendee_' },
         },
     };
     const queryCommand = new ScanCommand(params);
