@@ -1,26 +1,26 @@
 import { useLoaderData } from "react-router-dom";
 import AttendeeForm from "../components/AttendeeForm";
 import AttendeeList from "../components/AttendeeList";
-import { Event, Participant } from "../components/types";
+import { Event, Attendee } from "../components/types";
 import { getEvent } from "../services/events";
-import { getParicipants } from "../services/participants";
+import { getAttendees } from "../services/attendees";
 import { formatDateAndTime } from "../utils/date";
 
 type Args = {
   params: {
-    id: number;
+    id: string;
   };
 };
 
 export const eventLoader = async (args: Args): Promise<any> => {
-  const id: number = args.params.id;
-  return await Promise.all([getEvent(id), getParicipants(id)]);
+  const id: string = args.params.id;
+  return await Promise.all([getEvent(id), getAttendees(id)]);
 };
 
 const EventPage = () => {
-  const arr = useLoaderData() as (Event | Participant[] | null)[];
+  const arr = useLoaderData() as (Event | Attendee[] | null)[];
   const event = arr[0] as Event;
-  const participants = arr[1] as Participant[];
+  const participants = arr[1] as Attendee[];
   return (
     <div className="m-8 ">
       <h1 className="text-4xl font-extrabold">{event.name}</h1>

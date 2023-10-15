@@ -5,13 +5,7 @@ export type Event = {
   datetime: string;
 };
 
-export type Participant = {
+export type Attendee = {
   name: string;
-  attending: number;
-  answerTime: Date;
-};
-
-export type Participants = {
-  id?: number;
-  participants: Participant[];
+  attending: boolean;
 };

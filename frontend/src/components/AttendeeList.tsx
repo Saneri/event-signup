@@ -1,7 +1,7 @@
-import { Participant } from "./types";
+import { Attendee } from "./types";
 
 type Props = {
-  participants: Participant[];
+  participants: Attendee[];
 };
 
 const AttendeeList = (props: Props) => {
