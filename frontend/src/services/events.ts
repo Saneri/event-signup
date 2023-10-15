@@ -1,15 +1,6 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { Event } from "../components/types";
-
-const URL = import.meta.env.VITE_API_URL;
-const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
-
-const instance = axios.create({
-  baseURL: URL,
-  headers: {
-    "x-api-key": API_KEY,
-  },
-});
+import instance from "./instance";
 
 export const getEvents = async (): Promise<Event[] | null> => {
   try {
