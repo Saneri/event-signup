@@ -1,4 +1,4 @@
-import { Formik } from "formik";
+import { useFormik } from "formik";
 import { useState } from "react";
 import * as yup from "yup";
 import Button from "./common/Button";
@@ -14,34 +14,38 @@ const AttendeeForm = () => {
     name: "",
   };
 
+  const validationSchema = yup.object({
+    name: yup
+      .string()
+      .required()
+      .min(3, "name must be at least 3 characters long")
+      .matches(/^[A-Za-z\s\-\'\.]*$/, "only letters allowed"),
+  });
+
+  const submitForm = () => {
+    setSubmitted(true);
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: (values) => console.log(JSON.stringify(values, null, 2)),
+  });
+
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values, { setSubmitting, resetForm }) => {
-        console.log("submitted ", values);
-        setSubmitting(false);
-        resetForm();
-        setSubmitted(true);
-      }}
-      validationSchema={yup.object({
-        name: yup
-          .string()
-          .required()
-          .min(3, "must be at least 3 characters long"),
-      })}
-    >
-      {({ handleSubmit, handleChange }) => (
-        <form className="flex flex-col" onSubmit={handleSubmit}>
-          <label>Name</label>
-          <input
-            className="shadow border rounded py-2 px-3 my-1 text-gray-700"
-            name="name"
-            onChange={handleChange}
-          ></input>
-          <Button type="submit">Attend this event</Button>
-        </form>
+    <form className="flex flex-col" onSubmit={formik.handleSubmit}>
+      <label>Name</label>
+      <input
+        className="shadow border rounded py-2 px-3 my-1 text-gray-700"
+        name="name"
+        onChange={formik.handleChange}
+        value={formik.values.name}
+      ></input>
+      <Button type="submit">Attend this event</Button>
+      {formik.errors.name && (
+        <div className="text-red-600">{formik.errors.name}</div>
       )}
-    </Formik>
+    </form>
   );
 };
 
