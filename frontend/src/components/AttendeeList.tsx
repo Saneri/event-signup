@@ -1,4 +1,4 @@
-import { Attendee } from "./types";
+import type { Attendee } from "./types";
 
 type Props = {
   participants: Attendee[];

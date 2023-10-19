@@ -24,10 +24,7 @@ export const getEvent = async (id: string): Promise<Event | null> => {
 
 export const addEvent = async (event: Event): Promise<Event | null> => {
   try {
-    const res: AxiosResponse<Event> = await instance.post(
-      `${URL}/events`,
-      event
-    );
+    const res: AxiosResponse<Event> = await instance.post("/events", event);
     return res.data;
   } catch (err) {
     console.error(err);
