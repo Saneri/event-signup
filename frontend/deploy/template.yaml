@@ -6,6 +6,7 @@ Resources:
       BucketName: "event-signup-dev"
       WebsiteConfiguration:
         IndexDocument: index.html
+        ErrorDocument: index.html
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
     DeletionPolicy: Retain
