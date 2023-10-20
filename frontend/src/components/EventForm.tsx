@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { addEvent } from "../services/events";
 import Button from "./common/Button";
+import FormError from "./common/FormError";
 import { Event } from "./types";
 
 const EventForm = () => {
@@ -10,12 +11,12 @@ const EventForm = () => {
 
   const initialValues: Event = {
     name: "",
-    datetime: new Date().toString(),
+    datetime: "",
     description: "",
   };
 
   const validationSchema = yup.object({
-    name: yup.string().required(),
+    name: yup.string().required().min(3),
     datetime: yup.string().required(),
   });
 
@@ -43,6 +44,7 @@ const EventForm = () => {
         name="name"
         onChange={formik.handleChange}
       />
+      <FormError error={formik.errors.name} />
       <label className="my-1">Date and Time</label>
       <input
         className="shadow border rounded py-2 px-3 my-1 text-gray-700"
@@ -50,6 +52,7 @@ const EventForm = () => {
         name="datetime"
         onChange={formik.handleChange}
       />
+      <FormError error={formik.errors.datetime} />
       <label className="my-1">Description</label>
       <textarea
         className="shadow border rounded py-2 px-3 my-1 text-gray-700"

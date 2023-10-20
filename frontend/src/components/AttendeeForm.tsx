@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import * as yup from "yup";
 import Button from "./common/Button";
+import FormError from "./common/FormError";
 
 const AttendeeForm = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -18,7 +19,7 @@ const AttendeeForm = () => {
     name: yup
       .string()
       .required()
-      .min(3, "name must be at least 3 characters long")
+      .min(3)
       .matches(/^[A-Za-z\s\-\'\.]*$/, "only letters allowed"),
   });
 
@@ -42,9 +43,7 @@ const AttendeeForm = () => {
         value={formik.values.name}
       ></input>
       <Button type="submit">Attend this event</Button>
-      {formik.errors.name && (
-        <div className="text-red-600">{formik.errors.name}</div>
-      )}
+      <FormError error={formik.errors.name} />
     </form>
   );
 };
