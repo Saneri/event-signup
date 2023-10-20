@@ -1,61 +1,63 @@
-import { Formik } from "formik";
+import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
 import { addEvent } from "../services/events";
 import Button from "./common/Button";
-import * as yup from "yup";
+import { Event } from "./types";
 
 const EventForm = () => {
   const navigate = useNavigate();
 
-  const initialValues = {
+  const initialValues: Event = {
     name: "",
     datetime: new Date().toString(),
     description: "",
   };
 
+  const validationSchema = yup.object({
+    name: yup.string().required(),
+    datetime: yup.string().required(),
+  });
+
+  const submitForm = (values: Event) => {
+    addEvent(values);
+    formik.resetForm();
+    navigate("/");
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: submitForm,
+  });
+
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values, { setSubmitting, resetForm }) => {
-        addEvent(values);
-        setSubmitting(false);
-        resetForm();
-        navigate("/");
-      }}
-      validationSchema={yup.object({
-        name: yup.string().required(),
-        datetime: yup.string().required(),
-      })}
+    <form
+      className="flex flex-col bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      onSubmit={formik.handleSubmit}
     >
-      {({ handleSubmit, handleChange }) => (
-        <form
-          className="flex flex-col bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-          onSubmit={handleSubmit}
-        >
-          <label className="my-1">Event Name</label>
-          <input
-            className="shadow border rounded py-2 px-3 my-1 text-gray-700"
-            type="text"
-            name="name"
-            onChange={handleChange}
-          ></input>
-          <label className="my-1">Date and Time</label>
-          <input
-            className="shadow border rounded py-2 px-3 my-1 text-gray-700"
-            type="datetime-local"
-            name="datetime"
-            onChange={handleChange}
-          ></input>
-          <label className="my-1">Description</label>
-          <textarea
-            className="shadow border rounded py-2 px-3 my-1 text-gray-700"
-            name="description"
-            onChange={handleChange}
-          ></textarea>
-          <Button type="submit">Submit</Button>
-        </form>
-      )}
-    </Formik>
+      <label className="my-1">Event Name</label>
+      <input
+        className="shadow border rounded py-2 px-3 my-1 text-gray-700"
+        type="text"
+        name="name"
+        onChange={formik.handleChange}
+      />
+      <label className="my-1">Date and Time</label>
+      <input
+        className="shadow border rounded py-2 px-3 my-1 text-gray-700"
+        type="datetime-local"
+        name="datetime"
+        onChange={formik.handleChange}
+      />
+      <label className="my-1">Description</label>
+      <textarea
+        className="shadow border rounded py-2 px-3 my-1 text-gray-700"
+        name="description"
+        onChange={formik.handleChange}
+      />
+      <Button type="submit">Submit</Button>
+    </form>
   );
 };
 
