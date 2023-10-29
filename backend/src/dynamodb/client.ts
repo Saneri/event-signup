@@ -1,4 +1,4 @@
-import { AttributeValue, DynamoDBClient, GetItemCommand, PutItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
+import { AttributeValue, DynamoDBClient, GetItemCommand, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { randomUUID } from 'crypto';
 import { Event } from '../api/types';
 
@@ -10,17 +10,16 @@ const client = new DynamoDBClient({
 });
 
 export const getAllEvents = async (): Promise<Record<string, AttributeValue>[] | undefined> => {
-    // scan takes too much time, use query (with index) instead
     const params = {
         TableName: DYNAMO_TABLE_NAME,
-        FilterExpression: 'begins_with(PK,:pk) AND SK = :sk',
+        IndexName: 'GSI1',
+        KeyConditionExpression: 'SK = :sk',
         ExpressionAttributeValues: {
-            ':pk': { S: 'event_' },
             ':sk': { S: 'meta' },
         },
     };
-    const queryCommand = new ScanCommand(params);
-    const result = await client.send(queryCommand);
+
+    const result = await client.send(new QueryCommand(params));
     return result.Items;
 };
 
@@ -32,8 +31,7 @@ export const getEventById = async (id: string): Promise<Record<string, Attribute
             SK: { S: 'meta' },
         },
     };
-    const queryCommand = new GetItemCommand(params);
-    const result = await client.send(queryCommand);
+    const result = await client.send(new GetItemCommand(params));
     return result.Item;
 };
 
@@ -51,22 +49,20 @@ export const postEvent = async (body: Event) => {
         },
     };
 
-    const command = new PutItemCommand(itemToPut);
-    await client.send(command);
+    await client.send(new PutItemCommand(itemToPut));
 };
 
 export const getAllAttendees = async (eventId: string): Promise<Record<string, AttributeValue>[] | undefined> => {
-    // scan takes too much time, use query (with index) instead
     const params = {
         TableName: DYNAMO_TABLE_NAME,
-        FilterExpression: 'PK = :pk AND begins_with(SK,:sk)',
+        KeyConditionExpression: 'PK = :pk AND begins_with(SK,:sk)',
         ExpressionAttributeValues: {
             ':pk': { S: `event_${eventId}` },
             ':sk': { S: 'attendee_' },
         },
     };
-    const queryCommand = new ScanCommand(params);
-    const result = await client.send(queryCommand);
+
+    const result = await client.send(new QueryCommand(params));
     return result.Items;
 };
 

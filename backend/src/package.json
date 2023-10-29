@@ -7,7 +7,7 @@
         "lint": "eslint '*.ts'",
         "lint:fix": "eslint '*.ts' --fix",
         "test": "jest",
-        "init-db": "DYNAMODB_URL=http://localhost:8000 ts-node --esm initDynamodb.ts"
+        "init-db": "ts-node --esm initDynamodb.ts"
     },
     "type": "module",
     "dependencies": {

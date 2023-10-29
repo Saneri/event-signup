@@ -1,5 +1,9 @@
-import { CreateTableCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
-import dynamo from './dynamodb/client.js';
+import { CreateTableCommand, DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
+
+const dynamo = new DynamoDBClient({
+    endpoint: 'http://localhost:8000',
+    region: 'localhost',
+});
 
 const DYNAMO_TABLE_NAME = 'eventSignupTable';
 
@@ -18,24 +22,27 @@ const createTable = async () => {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,
         },
-        // this could be needed later
-        /*GlobalSecondaryIndexUpdates: [
+        GlobalSecondaryIndexes: [
             {
                 IndexName: 'GSI1',
                 KeySchema: [
-                    { AttributeName: 'GSI1', KeyType: 'S' },
-                    { AttributeName: 'SK', KeyType: 'S' },
+                    { AttributeName: 'SK', KeyType: 'HASH' },
+                    { AttributeName: 'PK', KeyType: 'RANGE' },
                 ],
+                ProvisionedThroughput: {
+                    ReadCapacityUnits: 1,
+                    WriteCapacityUnits: 1,
+                },
                 Projection: {
                     ProjectionType: 'ALL',
                 },
             },
-        ],*/
+        ],
     };
     const command = new CreateTableCommand(params);
 
     try {
-        const result = await dynamo.send(command);
+        await dynamo.send(command);
         console.log('Table created successfully');
     } catch (err) {
         console.error('Error creating table:', err);
@@ -94,9 +101,44 @@ const populateEvents = async () => {
     });
 };
 
+const populateAttendees = async () => {
+    const itemsToPut = [
+        {
+            TableName: DYNAMO_TABLE_NAME,
+            Item: {
+                PK: { S: 'event_1' },
+                SK: { S: 'attendee_1' },
+                name: { S: 'Bob' },
+                attending: { BOOL: true },
+            },
+        },
+        {
+            TableName: DYNAMO_TABLE_NAME,
+            Item: {
+                PK: { S: 'event_1' },
+                SK: { S: 'attendee_2' },
+                name: { S: 'Alice' },
+                attending: { BOOL: true },
+            },
+        },
+    ];
+
+    itemsToPut.map(async (itemToPut) => {
+        const command = new PutItemCommand(itemToPut);
+
+        try {
+            await dynamo.send(command);
+            console.log('Item added successfully');
+        } catch (error) {
+            console.error('Error adding item to DynamoDB:', error);
+        }
+    });
+};
+
 const main = async () => {
     await createTable();
     await populateEvents();
+    await populateAttendees();
 };
 
 main();
