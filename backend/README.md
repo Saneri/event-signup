@@ -2,7 +2,7 @@
 
 ## requirements
 
-- aws-sam-cli
+- aws-sam-cli >= 1.102.0
 - nvm
 
 ## initialize database
