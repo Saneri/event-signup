@@ -4,6 +4,8 @@ A web app where you can create your own events, send invitations to your friends
 
 Imagine facebook events without all the social feeds etc.
 
+The app is testable at https://d3da3lb7bhwbo0.cloudfront.net
+
 ## Tech stack
 
 | Service  | Technology |

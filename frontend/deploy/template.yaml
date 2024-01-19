@@ -26,3 +26,35 @@ Resources:
               - "s3:GetObject"
             Resource:
               - !Sub "arn:aws:s3:::event-signup-dev/*"
+
+  CloudFront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !GetAtt S3Bucket.DomainName
+            Id: MyS3Origin
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+        Enabled: true
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          TargetOriginId: MyS3Origin
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - OPTIONS
+            - HEAD
+        CustomErrorResponses:
+          - ErrorCode: 404
+            ResponsePagePath: /index.html
+            ResponseCode: 200
+          - ErrorCode: 403
+            ResponsePagePath: /index.html
+            ResponseCode: 200
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true

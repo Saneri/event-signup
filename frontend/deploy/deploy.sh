@@ -1,3 +1,5 @@
+set -e
+
 readonly BUCKET_NAME=event-signup-dev
 readonly AWS_PROFILE=santeri-dev
 
