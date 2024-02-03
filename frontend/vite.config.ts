@@ -8,4 +8,7 @@ export default defineConfig({
   test: {
     globals: true,
   },
+  define: {
+    global: {},
+  },
 });

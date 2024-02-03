@@ -22,3 +22,7 @@ yarn-error.log*
 
 # IntelliJ IDEA
 .idea
+
+# Env
+.env*
+!.env.example
