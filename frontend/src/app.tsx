@@ -5,6 +5,7 @@ import ErrorPage from "./pages/ErrorPage";
 import EventPage, { eventLoader } from "./pages/EventPage";
 import CreateEventsPage from "./pages/CreateEventPage";
 import LoginPage from "./pages/LoginPage";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -36,6 +37,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Navbar />
       <div className="sm:p-20">
         <RouterProvider router={router} />
       </div>
