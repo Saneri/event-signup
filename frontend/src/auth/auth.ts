@@ -1,6 +1,7 @@
 import {
   AuthenticationDetails,
   CognitoUser,
+  CognitoUserAttribute,
   CognitoUserPool,
   CognitoUserSession,
 } from "amazon-cognito-identity-js";
@@ -44,6 +45,41 @@ export function signIn(
       newPasswordRequired: function () {
         reject(new NewPasswordRequiredError("New password required"));
       },
+    });
+  });
+}
+
+export function getCurrentUser(): Promise<
+  CognitoUserAttribute[] | undefined | null
+> {
+  return new Promise((resolve, reject) => {
+    const userPool = new CognitoUserPool(poolData);
+    const cognitoUser = userPool.getCurrentUser();
+
+    if (!cognitoUser) {
+      return resolve(null);
+    }
+    cognitoUser.getSession(function (
+      err: Error,
+      session: CognitoUserSession | null
+    ) {
+      if (err) {
+        alert(err.message || JSON.stringify(err));
+        return reject(err);
+      }
+
+      if (!session) {
+        alert("No session");
+        return resolve(null);
+      }
+
+      cognitoUser.getUserAttributes(function (err, attributes) {
+        if (err) {
+          alert(err.message || JSON.stringify(err));
+          return reject(err);
+        }
+        return resolve(attributes);
+      });
     });
   });
 }

@@ -6,6 +6,7 @@ import EventPage, { eventLoader } from "./pages/EventPage";
 import CreateEventsPage from "./pages/CreateEventPage";
 import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar";
+import { UserProvider } from "./providers/UserProvider";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -36,12 +37,14 @@ const App = () => {
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Navbar />
-      <div className="sm:p-20">
-        <RouterProvider router={router} />
-      </div>
-    </QueryClientProvider>
+    <UserProvider>
+      <QueryClientProvider client={queryClient}>
+        <Navbar />
+        <div className="sm:p-20">
+          <RouterProvider router={router} />
+        </div>
+      </QueryClientProvider>
+    </UserProvider>
   );
 };
 

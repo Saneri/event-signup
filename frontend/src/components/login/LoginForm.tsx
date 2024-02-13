@@ -4,6 +4,8 @@ import { signIn } from "../../auth/auth";
 import { AuthenticationError, NewPasswordRequiredError } from "./errors";
 import Button from "../common/Button";
 import FormError from "../common/FormError";
+import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../../providers/UserProvider";
 
 type Login = {
   username: string;
@@ -11,6 +13,9 @@ type Login = {
 };
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const user = useUser(); // Get the current user
+
   const initialValues: Login = {
     username: "",
     password: "",
@@ -22,17 +27,18 @@ const LoginForm = () => {
   });
 
   const submitForm = async (values: Login) => {
-    signIn(values.username, values.password)
-      .then((user) => {
-        alert(JSON.stringify(user));
-      })
-      .catch((error) => {
-        if (error instanceof NewPasswordRequiredError) {
-          alert("handle new password required");
-        } else if (error instanceof AuthenticationError) {
-          alert("handle authentication error");
-        }
-      });
+    try {
+      const user = await signIn(values.username, values.password);
+      navigate("/");
+    } catch (error) {
+      if (error instanceof NewPasswordRequiredError) {
+        alert("handle new password required");
+      } else if (error instanceof AuthenticationError) {
+        alert("Incorrect username or password, please try again");
+      } else {
+        alert("unknown error");
+      }
+    }
   };
 
   const formik = useFormik({
@@ -40,6 +46,20 @@ const LoginForm = () => {
     validationSchema,
     onSubmit: submitForm,
   });
+
+  if (user) {
+    const email = user
+      ?.find((attribute) => attribute.getName() === "email")
+      ?.getValue();
+    return (
+      <div>
+        <div>You are logged in as {email}</div>
+        <Link to={"/"}>
+          <Button>Back to front page</Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <form

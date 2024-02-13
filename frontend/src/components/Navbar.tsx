@@ -1,4 +1,11 @@
+import { useUser } from "../providers/UserProvider";
+
 const Navbar = () => {
+  const user = useUser();
+  const email = user
+    ?.find((attribute) => attribute.getName() === "email")
+    ?.getValue();
+
   return (
     <nav className="bg-indigo-500 text-white sm:px-20">
       <div className="flex flex-wrap items-center justify-between p-4">
@@ -9,9 +16,7 @@ const Navbar = () => {
         </a>
         <div className="text-lg">
           <ul>
-            <li>
-              <a href="/login">Login</a>
-            </li>
+            <li>{email ? <span>{email}</span> : <a href="/login">Login</a>}</li>
           </ul>
         </div>
       </div>
