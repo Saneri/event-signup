@@ -12,7 +12,7 @@ const App = () => {
   const router = createBrowserRouter([
     {
       element: <NavbarWrapper />,
-      errorElement: <ErrorPage></ErrorPage>,
+      errorElement: <ErrorElement />,
       children: [
         {
           path: "/",
@@ -37,12 +37,23 @@ const App = () => {
 
   function NavbarWrapper() {
     return (
-      <div>
+      <>
         <Navbar />
         <div className="sm:p-20">
           <Outlet />
         </div>
-      </div>
+      </>
+    );
+  }
+
+  function ErrorElement() {
+    return (
+      <>
+        <Navbar />
+        <div className="sm:p-20">
+          <ErrorPage />
+        </div>
+      </>
     );
   }
 
