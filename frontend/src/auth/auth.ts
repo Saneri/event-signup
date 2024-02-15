@@ -19,18 +19,18 @@ export function signIn(
   username: string,
   password: string
 ): Promise<CognitoUserSession> {
-  var authenticationData = {
+  const authenticationData = {
     Username: username,
     Password: password,
   };
-  var authenticationDetails = new AuthenticationDetails(authenticationData);
+  const authenticationDetails = new AuthenticationDetails(authenticationData);
 
-  var userPool = new CognitoUserPool(poolData);
-  var userData = {
+  const userPool = new CognitoUserPool(poolData);
+  const userData = {
     Username: username,
     Pool: userPool,
   };
-  var cognitoUser = new CognitoUser(userData);
+  const cognitoUser = new CognitoUser(userData);
 
   return new Promise((resolve, reject) => {
     cognitoUser.authenticateUser(authenticationDetails, {
@@ -47,6 +47,15 @@ export function signIn(
       },
     });
   });
+}
+
+export function signOut() {
+  const userPool = new CognitoUserPool(poolData);
+  const cognitoUser = userPool.getCurrentUser();
+
+  if (cognitoUser) {
+    cognitoUser.signOut();
+  }
 }
 
 export function getCurrentUser(): Promise<

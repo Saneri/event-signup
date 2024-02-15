@@ -8,7 +8,12 @@ import {
 } from "react";
 import { getCurrentUser } from "../auth/auth";
 
-const UserContext = createContext<CognitoUserAttribute[] | null>(null);
+type UserContextType = {
+  user: CognitoUserAttribute[] | null;
+  clearUser: () => void;
+};
+
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<CognitoUserAttribute[] | null>(null);
@@ -22,7 +27,15 @@ export function UserProvider({ children }: { children: ReactNode }) {
     fetchUser();
   }, []);
 
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  const clearUser = () => {
+    setUser(null);
+  };
+
+  return (
+    <UserContext.Provider value={{ user, clearUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
 
 export function useUser() {

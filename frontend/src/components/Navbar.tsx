@@ -1,10 +1,18 @@
+import { Link } from "react-router-dom";
+import { signOut } from "../auth/auth";
 import { useUser } from "../providers/UserProvider";
+import Button from "./common/Button";
 
 const Navbar = () => {
-  const user = useUser();
+  const { user, clearUser } = useUser();
   const email = user
     ?.find((attribute) => attribute.getName() === "email")
     ?.getValue();
+
+  function logout() {
+    signOut();
+    clearUser();
+  }
 
   return (
     <nav className="bg-indigo-500 text-white sm:px-20">
@@ -14,11 +22,18 @@ const Navbar = () => {
             Event Signup
           </span>
         </a>
-        <div className="text-lg">
-          <ul>
-            <li>{email ? <span>{email}</span> : <a href="/login">Login</a>}</li>
-          </ul>
-        </div>
+        <ul className="flex flex-wrap items-center gap-4 text-lg">
+          {email && <li>{email}</li>}
+          <li>
+            {email ? (
+              <Button onClick={logout}>Logout</Button>
+            ) : (
+              <Link to="/login">
+                <Button>Login</Button>
+              </Link>
+            )}
+          </li>
+        </ul>
       </div>
     </nav>
   );

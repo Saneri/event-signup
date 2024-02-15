@@ -14,7 +14,7 @@ type Login = {
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const user = useUser(); // Get the current user
+  const { user } = useUser();
 
   const initialValues: Login = {
     username: "",
@@ -28,7 +28,7 @@ const LoginForm = () => {
 
   const submitForm = async (values: Login) => {
     try {
-      const user = await signIn(values.username, values.password);
+      await signIn(values.username, values.password);
       navigate("/");
     } catch (error) {
       if (error instanceof NewPasswordRequiredError) {
@@ -52,7 +52,7 @@ const LoginForm = () => {
       ?.find((attribute) => attribute.getName() === "email")
       ?.getValue();
     return (
-      <div>
+      <div className="flex flex-col items-center gap-4">
         <div>You are logged in as {email}</div>
         <Link to={"/"}>
           <Button>Back to front page</Button>
