@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import AttendeeForm from "../components/AttendeeForm";
 import AttendeeList from "../components/AttendeeList";
 import { Event, Attendee } from "../components/types";
@@ -6,14 +6,15 @@ import { getEvent } from "../services/events";
 import { getAttendees } from "../services/attendees";
 import { formatDateAndTime } from "../utils/date";
 
-type Args = {
-  params: {
-    id: string;
-  };
-};
+type Args = LoaderFunctionArgs<{
+  id: string;
+}>;
 
 export const eventLoader = async (args: Args): Promise<any> => {
-  const id: string = args.params.id;
+  const id: string | undefined = args.params.id;
+  if (!id) {
+    return Promise.reject();
+  }
   return await Promise.all([getEvent(id), getAttendees(id)]);
 };
 
