@@ -11,6 +11,7 @@ import { getCurrentUser } from "../auth/auth";
 type UserContextType = {
   user: CognitoUserAttribute[] | null;
   clearUser: () => void;
+  fetchUser: () => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -32,7 +33,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <UserContext.Provider value={{ user, clearUser }}>
+    <UserContext.Provider value={{ user, clearUser, fetchUser }}>
       {children}
     </UserContext.Provider>
   );

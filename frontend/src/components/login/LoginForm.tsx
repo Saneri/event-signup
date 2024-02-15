@@ -14,7 +14,7 @@ type Login = {
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, fetchUser } = useUser();
 
   const initialValues: Login = {
     username: "",
@@ -29,6 +29,7 @@ const LoginForm = () => {
   const submitForm = async (values: Login) => {
     try {
       await signIn(values.username, values.password);
+      fetchUser();
       navigate("/");
     } catch (error) {
       if (error instanceof NewPasswordRequiredError) {
