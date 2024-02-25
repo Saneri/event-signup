@@ -2,9 +2,23 @@ import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import EventList from "../components/EventList";
 import { getEvents } from "../services/events";
+import { useUser } from "../providers/UserProvider";
+import Button from "../components/common/Button";
+import { useEffect, useState } from "react";
 
 const BrowseEventsPage = () => {
-  const { isLoading, error, data } = useQuery("event", getEvents);
+  const { session } = useUser();
+  const [sessionToken, setSessionToken] = useState(
+    session?.getAccessToken().getJwtToken()
+  );
+
+  const { isLoading, error, data } = useQuery(["event", sessionToken], () => {
+    return getEvents(sessionToken ?? "");
+  });
+
+  useEffect(() => {
+    setSessionToken(session?.getAccessToken().getJwtToken());
+  }, [session]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -12,10 +26,8 @@ const BrowseEventsPage = () => {
 
   return (
     <div>
-      <Link className="flex justify-center" to="/create">
-        <button className="shadow border rounded py-2 px-3 my-10 bg-indigo-500 text-white hover:bg-indigo-600 hover:shadow-md active:bg-indigo-700 active:shadow-md transition duration-150 ease-in-out">
-          Create new event
-        </button>
+      <Link className="flex justify-center my-10" to="/create">
+        <Button>Create new event</Button>
       </Link>
       {data == null ? <h1>No Events yet</h1> : <EventList events={data} />}
     </div>

@@ -49,7 +49,7 @@ export function signIn(
   });
 }
 
-export function signOut() {
+export function signOut(): void {
   const userPool = new CognitoUserPool(poolData);
   const cognitoUser = userPool.getCurrentUser();
 
@@ -89,6 +89,29 @@ export function getCurrentUser(): Promise<
         }
         return resolve(attributes);
       });
+    });
+  });
+}
+
+export function getCurrentSession(): Promise<CognitoUserSession | null> {
+  return new Promise((resolve, reject) => {
+    const userPool = new CognitoUserPool(poolData);
+    const cognitoUser = userPool.getCurrentUser();
+
+    if (!cognitoUser) {
+      return resolve(null);
+    }
+
+    cognitoUser.getSession(function (
+      err: Error,
+      session: CognitoUserSession | null
+    ) {
+      if (err) {
+        alert(err.message || JSON.stringify(err));
+        return reject(err);
+      }
+
+      return resolve(session);
     });
   });
 }

@@ -4,14 +4,14 @@ import { useUser } from "../providers/UserProvider";
 import Button from "./common/Button";
 
 const Navbar = () => {
-  const { user, clearUser } = useUser();
+  const { user, fetchUser } = useUser();
   const email = user
     ?.find((attribute) => attribute.getName() === "email")
     ?.getValue();
 
   function logout() {
     signOut();
-    clearUser();
+    fetchUser();
   }
 
   return (
