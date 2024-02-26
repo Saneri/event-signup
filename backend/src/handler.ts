@@ -14,8 +14,8 @@ import attendeesGetAll from './api/attendeesGetAll';
  *
  */
 
-export const eventsGetAllHandler = async (): Promise<APIGatewayProxyResult> => {
-    return eventsGetAll();
+export const eventsGetAllHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    return eventsGetAll(event);
 };
 
 export const eventsPostHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {

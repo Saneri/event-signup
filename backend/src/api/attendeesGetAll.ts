@@ -1,8 +1,15 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { getAllAttendees } from '../dynamodb/client.js';
 import { apiResponse } from './response.js';
+import { verifyCognitoToken } from './utils.js';
+import { Attendee } from './types.js';
 
 const attendeesGetAll = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    const isValidToken = await verifyCognitoToken(event.headers.Authorization);
+    if (!isValidToken) {
+        return apiResponse(401, { message: 'Unauthorized' });
+    }
+
     const id = event.pathParameters?.id;
     if (!id) {
         return apiResponse(400);
@@ -14,7 +21,7 @@ const attendeesGetAll = async (event: APIGatewayProxyEvent): Promise<APIGatewayP
             return apiResponse(200, []);
         }
 
-        const data: Record<string, any> = attendees.map((attendee) => {
+        const data: Attendee[] = attendees.map((attendee) => {
             return {
                 name: attendee.name.S,
                 attending: attendee.attending.BOOL,

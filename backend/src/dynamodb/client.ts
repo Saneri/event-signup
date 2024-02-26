@@ -1,6 +1,6 @@
 import { AttributeValue, DynamoDBClient, GetItemCommand, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { randomUUID } from 'crypto';
-import { Event } from '../api/types';
+import { DynamoEvent } from '../api/types';
 
 const DYNAMO_TABLE_NAME = 'eventSignupTable';
 
@@ -35,7 +35,7 @@ export const getEventById = async (id: string): Promise<Record<string, Attribute
     return result.Item;
 };
 
-export const postEvent = async (body: Event) => {
+export const postEvent = async (body: DynamoEvent) => {
     const itemToPut = {
         TableName: DYNAMO_TABLE_NAME,
         Item: {
