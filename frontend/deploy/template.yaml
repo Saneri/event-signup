@@ -58,3 +58,4 @@ Resources:
             ResponseCode: 200
         ViewerCertificate:
           CloudFrontDefaultCertificate: true
+        PriceClass: PriceClass_100 # Use only North America and Europe
