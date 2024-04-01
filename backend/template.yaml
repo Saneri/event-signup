@@ -47,8 +47,6 @@ Resources:
             RestApiId: !Ref Api
             Path: /events
             Method: get
-            Auth:
-              ApiKeyRequired: true
       Environment:
         Variables:
           ENV: !Ref Env
@@ -83,8 +81,6 @@ Resources:
             RestApiId: !Ref Api
             Path: /events/{id}
             Method: get
-            Auth:
-              ApiKeyRequired: true
       Environment:
         Variables:
           ENV: !Ref Env
@@ -119,8 +115,6 @@ Resources:
             RestApiId: !Ref Api
             Path: /events
             Method: post
-            Auth:
-              ApiKeyRequired: true
       Environment:
         Variables:
           ENV: !Ref Env
@@ -154,8 +148,6 @@ Resources:
             RestApiId: !Ref Api
             Path: /attendees/{id}
             Method: get
-            Auth:
-              ApiKeyRequired: true
       Environment:
         Variables:
           ENV: !Ref Env
