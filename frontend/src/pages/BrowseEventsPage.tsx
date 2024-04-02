@@ -7,18 +7,9 @@ import Button from "../components/common/Button";
 import { useEffect, useState } from "react";
 
 const BrowseEventsPage = () => {
-  const { session } = useUser();
-  const [sessionToken, setSessionToken] = useState(
-    session?.getAccessToken().getJwtToken()
-  );
-
-  const { isLoading, error, data } = useQuery(["event", sessionToken], () => {
-    return getEvents(sessionToken ?? "");
+  const { isLoading, error, data } = useQuery("event", () => {
+    return getEvents();
   });
-
-  useEffect(() => {
-    setSessionToken(session?.getAccessToken().getJwtToken());
-  }, [session]);
 
   if (isLoading) return <div>Loading...</div>;
 

@@ -2,15 +2,9 @@ import { AxiosResponse } from "axios";
 import { Event } from "../components/types";
 import instance from "./instance";
 
-export const getEvents = async (
-  accessToken: string
-): Promise<Event[] | null> => {
+export const getEvents = async (): Promise<Event[] | null> => {
   try {
-    const res = await instance.get("/events", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const res = await instance.get("/events");
     return res.data;
   } catch (err) {
     console.error(err);
