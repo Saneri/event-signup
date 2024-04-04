@@ -7,7 +7,7 @@
         "lint": "eslint '*.ts'",
         "lint:fix": "eslint '*.ts' --fix",
         "test": "jest",
-        "init-db": "ts-node --esm initDynamodb.ts"
+        "init-db": "tsx initDynamodb.ts"
     },
     "type": "module",
     "dependencies": {
@@ -27,7 +27,7 @@
         "jest": "^29.2.1",
         "prettier": "^2.5.1",
         "ts-jest": "^29.0.5",
-        "ts-node": "^10.9.1",
+        "tsx": "^4.7.2",
         "typescript": "^5.3.3"
     }
 }
