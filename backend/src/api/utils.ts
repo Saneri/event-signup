@@ -1,6 +1,9 @@
 import { getUserSub } from '../auth/cognito';
 
 export const verifyCognitoToken = async (accessToken: string | undefined): Promise<boolean> => {
+    if (process.env.MOCK_AUTH) {
+        return true;
+    }
     if (!accessToken) {
         return false;
     }

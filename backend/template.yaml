@@ -6,11 +6,18 @@ Globals:
   Function:
     Timeout: 29
     Runtime: nodejs20.x
+    Environment:
+      Variables:
+        MOCK_AUTH: !Ref MockAuth
+        ENV: !Ref Env
 
 Parameters:
   Env:
     Type: String
     Default: prod
+  MockAuth:
+    Type: Boolean
+    Default: false
 
 Resources:
   Api:
@@ -47,9 +54,6 @@ Resources:
             RestApiId: !Ref Api
             Path: /events
             Method: get
-      Environment:
-        Variables:
-          ENV: !Ref Env
       Policies:
         - Statement:
             - Sid: dynamoGetAllEventsPolicy
@@ -81,9 +85,6 @@ Resources:
             RestApiId: !Ref Api
             Path: /events/{id}
             Method: get
-      Environment:
-        Variables:
-          ENV: !Ref Env
       Policies:
         - Statement:
             - Sid: dynamoGetAllEventsPolicy
@@ -115,9 +116,6 @@ Resources:
             RestApiId: !Ref Api
             Path: /events
             Method: post
-      Environment:
-        Variables:
-          ENV: !Ref Env
       Policies:
         - Statement:
             - Sid: dynamoPostEventsPolicy
@@ -148,9 +146,6 @@ Resources:
             RestApiId: !Ref Api
             Path: /attendees/{id}
             Method: get
-      Environment:
-        Variables:
-          ENV: !Ref Env
       Policies:
         - Statement:
             - Sid: dynamoPostEventsPolicy
@@ -159,6 +154,30 @@ Resources:
                 - dynamodb:Scan
                 - dynamodb:Query
               Resource: "*"
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - handler.ts
+
+  putAttendees:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: event-signup-backend-putAttendees-dev
+      CodeUri: src/
+      Handler: handler.attendeesPutHandler
+      Architectures:
+        - x86_64
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /attendees/{id}
+            Method: put
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
