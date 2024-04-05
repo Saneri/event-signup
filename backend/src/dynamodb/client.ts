@@ -1,6 +1,13 @@
-import { AttributeValue, DynamoDBClient, GetItemCommand, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
+import {
+    AttributeValue,
+    DynamoDBClient,
+    GetItemCommand,
+    PutItemCommand,
+    QueryCommand,
+    UpdateItemCommand,
+} from '@aws-sdk/client-dynamodb';
 import { randomUUID } from 'crypto';
-import { DynamoEvent } from '../api/types';
+import { DynamoAttendee, DynamoEvent } from '../api/types';
 
 const DYNAMO_TABLE_NAME = 'eventSignupTable';
 
@@ -64,6 +71,27 @@ export const getAllAttendees = async (eventId: string): Promise<Record<string, A
 
     const result = await client.send(new QueryCommand(params));
     return result.Items;
+};
+
+export const editAttendee = async (body: DynamoAttendee, eventId: string, userSub: string): Promise<void> => {
+    const itemToUpdate = {
+        TableName: DYNAMO_TABLE_NAME,
+        Key: {
+            PK: { S: `event_${eventId}` },
+            SK: { S: `attendee_${userSub}` },
+        },
+        UpdateExpression: 'SET #A = :a',
+        ExpressionAttributeNames: {
+            '#A': 'attending',
+        },
+        ExpressionAttributeValues: {
+            ':a': { BOOL: body.attending },
+        },
+        ConditionExpression: 'attribute_exists(PK) AND attribute_exists(SK)',
+        ReturnValues: 'UPDATED_NEW',
+    };
+
+    await client.send(new UpdateItemCommand(itemToUpdate));
 };
 
 export default client;

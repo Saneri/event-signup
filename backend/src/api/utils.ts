@@ -1,15 +1,20 @@
 import { getUserSub } from '../auth/cognito';
 
-export const verifyCognitoToken = async (accessToken: string | undefined): Promise<boolean> => {
+/**
+ * Retrieves the AWS Cognito sub associated with the provided access token.
+ * @param accessToken - The bearer token used to authenticate the user.
+ * @returns If succesful, returns Cognito sub string which is a static UUID for each used. If fails, returns an empty string.
+ */
+export const getCognitoToken = async (accessToken: string | undefined): Promise<string> => {
     if (process.env.MOCK_AUTH) {
-        return true;
+        return process.env.MOCK_AUTH;
     }
     if (!accessToken) {
-        return false;
+        return '';
     }
     const userSub = await getUserSub(accessToken.split(' ')[1]);
     if (!userSub) {
-        return false;
+        return '';
     }
-    return true;
+    return userSub;
 };

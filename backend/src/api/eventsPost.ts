@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { postEvent } from '../dynamodb/client';
 import { apiResponse } from './response';
 import { DynamoEvent } from './types';
-import { verifyCognitoToken } from './utils';
+import { getCognitoToken } from './utils';
 
 const validateEventBody = (requestBody: string | null): DynamoEvent | null => {
     const body = JSON.parse(requestBody || '{}');
@@ -13,7 +13,7 @@ const validateEventBody = (requestBody: string | null): DynamoEvent | null => {
 };
 
 const eventsPost = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const isValidToken = await verifyCognitoToken(event.headers.Authorization);
+    const isValidToken = await getCognitoToken(event.headers.Authorization);
     if (!isValidToken) {
         return apiResponse(401, { message: 'Unauthorized' });
     }

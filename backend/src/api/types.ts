@@ -1,6 +1,4 @@
 export type DynamoEvent = {
-    PK: string;
-    SK: string;
     name: string;
     datetime: string;
     description: string;
@@ -11,6 +9,10 @@ export type Event = {
     datetime: string | undefined;
     description: string | undefined;
     id: string | undefined;
+};
+
+export type DynamoAttendee = {
+    attending: boolean;
 };
 
 export type Attendee = {

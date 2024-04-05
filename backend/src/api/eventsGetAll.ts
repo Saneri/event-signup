@@ -2,12 +2,12 @@ import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { getAllEvents } from '../dynamodb/client.js';
 import { apiResponse } from './response.js';
 import { Event } from './types';
-import { verifyCognitoToken } from './utils.js';
+import { getCognitoToken } from './utils.js';
 
 const FIND_ID_REGEX = /event_([0-9a-fA-F-]+)/;
 
 const eventsGet = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
-    const isValidToken = await verifyCognitoToken(event.headers.Authorization);
+    const isValidToken = await getCognitoToken(event.headers.Authorization);
     if (!isValidToken) {
         return apiResponse(401, { message: 'Unauthorized' });
     }

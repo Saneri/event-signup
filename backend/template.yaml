@@ -17,7 +17,7 @@ Parameters:
     Default: prod
   MockAuth:
     Type: Boolean
-    Default: false
+    Default:
 
 Resources:
   Api:
