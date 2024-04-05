@@ -13,7 +13,11 @@ const AttendeeList = (props: Props) => {
   return (
     <ul className="list-disc list-inside">
       {participants.map((participant) => {
-        return <li key={participant.name}>{participant.name}</li>;
+        return (
+          <li key={participant.name}>
+            {participant.name} {participant.attending ? "✅" : "❌"}
+          </li>
+        );
       })}
     </ul>
   );
