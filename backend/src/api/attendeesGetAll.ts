@@ -24,7 +24,7 @@ const attendeesGetAll = async (event: APIGatewayProxyEvent): Promise<APIGatewayP
         const data: Attendee[] = attendees.map((attendee) => {
             return {
                 name: attendee.name.S,
-                attending: attendee.attending.BOOL,
+                attending: attendee.attending?.BOOL,
             };
         });
 

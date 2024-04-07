@@ -4,6 +4,16 @@ type Props = {
   participants: Attendee[];
 };
 
+const getAttendingEmoji = (attending: boolean | undefined) => {
+  if (attending === true) {
+    return "✅";
+  } else if (attending === false) {
+    return "❌";
+  } else {
+    return "❓";
+  }
+};
+
 const AttendeeList = (props: Props) => {
   const { participants } = props;
   if (!participants?.length) {
@@ -15,7 +25,7 @@ const AttendeeList = (props: Props) => {
       {participants.map((participant) => {
         return (
           <li key={participant.name}>
-            {participant.name} {participant.attending ? "✅" : "❌"}
+            {participant.name} {getAttendingEmoji(participant.attending)}
           </li>
         );
       })}
