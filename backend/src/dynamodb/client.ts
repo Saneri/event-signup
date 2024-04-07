@@ -1,5 +1,6 @@
 import {
     AttributeValue,
+    BatchGetItemCommand,
     DynamoDBClient,
     GetItemCommand,
     PutItemCommand,
@@ -16,18 +17,45 @@ const client = new DynamoDBClient({
     region: process.env.ENV === 'dev' ? 'localhost' : undefined,
 });
 
-export const getAllEvents = async (): Promise<Record<string, AttributeValue>[] | undefined> => {
-    const params = {
+/**
+ * Retrieves all events associated with a user.
+ * First queries the GSI1 index to find all events the user is attending.
+ * Then queries the table for the event metadata.
+ * @param userSub - The user's unique identifier.
+ * @returns A promise that resolves to an array of event records.
+ */
+export const getAllEvents = async (userSub: string): Promise<Record<string, AttributeValue>[] | undefined> => {
+    const attendeeParams = {
         TableName: DYNAMO_TABLE_NAME,
         IndexName: 'GSI1',
         KeyConditionExpression: 'SK = :sk',
         ExpressionAttributeValues: {
-            ':sk': { S: 'meta' },
+            ':sk': { S: `attendee_${userSub}` },
         },
     };
 
-    const result = await client.send(new QueryCommand(params));
-    return result.Items;
+    const attendeeResult = await client.send(new QueryCommand(attendeeParams));
+    const attendeeItems = attendeeResult.Items;
+
+    if (!attendeeItems) {
+        return [];
+    }
+
+    const eventKeys = attendeeItems.map((item) => ({
+        PK: item.PK,
+        SK: { S: 'meta' },
+    }));
+
+    const eventParams = {
+        RequestItems: {
+            [DYNAMO_TABLE_NAME]: {
+                Keys: eventKeys,
+            },
+        },
+    };
+
+    const eventResult = await client.send(new BatchGetItemCommand(eventParams));
+    return eventResult.Responses?.[DYNAMO_TABLE_NAME];
 };
 
 export const getEventById = async (id: string): Promise<Record<string, AttributeValue> | undefined> => {

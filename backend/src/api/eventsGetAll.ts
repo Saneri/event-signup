@@ -7,13 +7,13 @@ import { getCognitoToken } from './utils.js';
 const FIND_ID_REGEX = /event_([0-9a-fA-F-]+)/;
 
 const eventsGet = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
-    const isValidToken = await getCognitoToken(event.headers.Authorization);
-    if (!isValidToken) {
+    const userSub = await getCognitoToken(event.headers.Authorization);
+    if (!userSub) {
         return apiResponse(401, { message: 'Unauthorized' });
     }
 
     try {
-        const events = await getAllEvents();
+        const events = await getAllEvents(userSub);
 
         if (!events) {
             return apiResponse(200, []);
