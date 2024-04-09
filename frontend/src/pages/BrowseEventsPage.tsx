@@ -18,7 +18,11 @@ const BrowseEventsPage = () => {
       <Link className="flex justify-center my-10" to="/create">
         <Button>Create new event</Button>
       </Link>
-      {data == null ? <h1>No Events yet</h1> : <EventList events={data} />}
+      {data == null || !data.length ? (
+        <h1>No Events yet</h1>
+      ) : (
+        <EventList events={data} />
+      )}
     </div>
   );
 };

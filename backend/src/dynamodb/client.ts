@@ -37,7 +37,7 @@ export const getAllEvents = async (userSub: string): Promise<Record<string, Attr
     const attendeeResult = await client.send(new QueryCommand(attendeeParams));
     const attendeeItems = attendeeResult.Items;
 
-    if (!attendeeItems) {
+    if (!attendeeItems || attendeeItems.length === 0) {
         return [];
     }
 
