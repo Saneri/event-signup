@@ -5,20 +5,25 @@ import {
   CognitoUserPool,
   CognitoUserSession,
 } from "amazon-cognito-identity-js";
-import {
-  AuthenticationError,
-  NewPasswordRequiredError,
-} from "../components/login/errors";
+import { AuthenticationError } from "../components/login/errors";
 
 const poolData = {
   UserPoolId: import.meta.env.VITE_USER_POOL_ID,
   ClientId: import.meta.env.VITE_CLIENT_ID,
 };
 
+// global variable to keep the same user session between sign-in and new password challenge
+let userWithSession: CognitoUser | null = null;
+
+type SignInOutcome = {
+  cognitoUser?: CognitoUser;
+  newPasswordRequired?: boolean;
+};
+
 export function signIn(
   username: string,
   password: string
-): Promise<CognitoUserSession> {
+): Promise<SignInOutcome> {
   const authenticationData = {
     Username: username,
     Password: password,
@@ -35,7 +40,7 @@ export function signIn(
   return new Promise((resolve, reject) => {
     cognitoUser.authenticateUser(authenticationDetails, {
       onSuccess: function (result: CognitoUserSession) {
-        resolve(result);
+        resolve({});
       },
 
       onFailure: function (err: Error) {
@@ -43,7 +48,8 @@ export function signIn(
       },
 
       newPasswordRequired: function () {
-        reject(new NewPasswordRequiredError("New password required"));
+        userWithSession = cognitoUser;
+        resolve({ cognitoUser, newPasswordRequired: true });
       },
     });
   });
@@ -113,5 +119,29 @@ export function getCurrentSession(): Promise<CognitoUserSession | null> {
 
       return resolve(session);
     });
+  });
+}
+
+export function completeNewPasswordChallenge(
+  newPassword: string,
+  nickname: string
+): Promise<CognitoUserSession> {
+  return new Promise((resolve, reject) => {
+    if (!userWithSession) {
+      return reject(new Error("No user"));
+    }
+    userWithSession.completeNewPasswordChallenge(
+      newPassword,
+      { nickname, picture: "placeholder" },
+      {
+        onSuccess: function (session: CognitoUserSession) {
+          resolve(session);
+        },
+
+        onFailure: function (err: Error) {
+          reject(new AuthenticationError(err.message || JSON.stringify(err)));
+        },
+      }
+    );
   });
 }
