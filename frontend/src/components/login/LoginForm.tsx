@@ -70,8 +70,13 @@ const LoginForm = () => {
           onChange={formik.handleChange}
         />
         <FormError error={formik.errors.password} />
-        <Button type="submit">Sign in</Button>
+        <Button className="mt-2" type="submit">
+          Sign in
+        </Button>
       </form>
+      <Button className="mt-2" onClick={() => navigate("/register")}>
+        Register
+      </Button>
     </div>
   );
 };
