@@ -34,6 +34,8 @@ Resources:
     Type: AWS::Cognito::UserPool
     Properties:
       UserPoolName: event-signup-cognito-pool-dev
+      AutoVerifiedAttributes:
+        - email
       AccountRecoverySetting:
         RecoveryMechanisms:
           - Name: verified_email
