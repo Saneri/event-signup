@@ -6,17 +6,17 @@ import FormError from "../common/FormError";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../providers/UserProvider";
 
-type FinishSignup = {
+type ResetPassword = {
   newPassword: string;
   repeatNewPassword: string;
   nickname: string;
 };
 
-const FinishSignupForm = () => {
+const ResetPasswordForm = () => {
   const navigate = useNavigate();
   const { fetchUser } = useUser();
 
-  const initialValues: FinishSignup = {
+  const initialValues: ResetPassword = {
     newPassword: "",
     repeatNewPassword: "",
     nickname: "",
@@ -34,7 +34,7 @@ const FinishSignupForm = () => {
     nickname: yup.string().required(),
   });
 
-  const submitForm = async (values: FinishSignup) => {
+  const submitForm = async (values: ResetPassword) => {
     await completeNewPasswordChallenge(
       values.newPassword,
       values.nickname
@@ -82,4 +82,4 @@ const FinishSignupForm = () => {
   );
 };
 
-export default FinishSignupForm;
+export default ResetPasswordForm;

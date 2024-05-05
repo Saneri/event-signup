@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import FinishSignupForm from "../components/login/FinishSignupForm";
+import ResetPasswordForm from "../components/login/ResetPassword";
 import Button from "../components/common/Button";
 
 const FinishSignupPage = () => {
@@ -23,7 +23,7 @@ const FinishSignupPage = () => {
         <div>It seems that it's your first time logging in. </div>
         <div>Welcome, {username}!</div>
       </div>
-      <FinishSignupForm />
+      <ResetPasswordForm />
     </div>
   );
 };

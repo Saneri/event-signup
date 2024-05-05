@@ -5,7 +5,6 @@ import { AuthenticationError } from "./errors";
 import Button from "../common/Button";
 import FormError from "../common/FormError";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../../providers/UserProvider";
 
 type Login = {
   username: string;
@@ -14,7 +13,6 @@ type Login = {
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const { fetchUser } = useUser();
 
   const initialValues: Login = {
     username: "",

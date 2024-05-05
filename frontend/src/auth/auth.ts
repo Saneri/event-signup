@@ -4,8 +4,11 @@ import {
   CognitoUserAttribute,
   CognitoUserPool,
   CognitoUserSession,
+  ISignUpResult,
 } from "amazon-cognito-identity-js";
 import { AuthenticationError } from "../components/login/errors";
+
+const PICTURE_PLACEHOLDER_STRING = "placeholder";
 
 const poolData = {
   UserPoolId: import.meta.env.VITE_USER_POOL_ID,
@@ -132,7 +135,7 @@ export function completeNewPasswordChallenge(
     }
     userWithSession.completeNewPasswordChallenge(
       newPassword,
-      { nickname, picture: "placeholder" },
+      { nickname, picture: PICTURE_PLACEHOLDER_STRING },
       {
         onSuccess: function (session: CognitoUserSession) {
           resolve(session);
@@ -143,5 +146,64 @@ export function completeNewPasswordChallenge(
         },
       }
     );
+  });
+}
+
+export function registerNewUser(
+  email: string,
+  password: string,
+  nickname: string
+): Promise<CognitoUser> {
+  return new Promise((resolve, reject) => {
+    const emailAttribute = new CognitoUserAttribute({
+      Name: "email",
+      Value: email,
+    });
+    const nickNameAttribute = new CognitoUserAttribute({
+      Name: "nickname",
+      Value: nickname,
+    });
+    const pictureAttribute = new CognitoUserAttribute({
+      Name: "picture",
+      Value: PICTURE_PLACEHOLDER_STRING,
+    });
+
+    const userPool = new CognitoUserPool(poolData);
+    userPool.signUp(
+      email,
+      password,
+      [emailAttribute, nickNameAttribute, pictureAttribute],
+      [],
+      function (err?: Error, result?: ISignUpResult) {
+        if (err) {
+          return reject(
+            new AuthenticationError(err.message || JSON.stringify(err))
+          );
+        }
+
+        if (!result) {
+          return reject(new Error("No result"));
+        }
+
+        resolve(result.user);
+      }
+    );
+  });
+}
+
+export function confirmRegistration(
+  username: string,
+  code: string
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const userPool = new CognitoUserPool(poolData);
+    const cognitoUser = new CognitoUser({ Username: username, Pool: userPool });
+
+    cognitoUser.confirmRegistration(code, true, function (err: Error) {
+      if (err) {
+        return reject(err);
+      }
+      resolve();
+    });
   });
 }
