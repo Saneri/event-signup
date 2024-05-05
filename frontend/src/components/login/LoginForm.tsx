@@ -28,9 +28,8 @@ const LoginForm = () => {
     try {
       const signInOutcome = await signIn(values.username, values.password);
       if (signInOutcome.newPasswordRequired) {
-        navigate("/finish-signup", {
-          state: { username: values.username },
-        });
+        // This should only happen if admin creates a new user manually which should not happen
+        alert("New password required. Please contact administrator.");
       } else {
         navigate("/");
       }

@@ -7,7 +7,6 @@ import CreateEventsPage from "./pages/CreateEventPage";
 import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar";
 import { UserProvider } from "./providers/UserProvider";
-import FinishSignupPage from "./pages/FinishSignupPage";
 import RegisterPage from "./pages/RegisterPage";
 
 const App = () => {
@@ -32,10 +31,6 @@ const App = () => {
         {
           path: "/login",
           element: <LoginPage />,
-        },
-        {
-          path: "/finish-signup",
-          element: <FinishSignupPage />,
         },
         {
           path: "/register",

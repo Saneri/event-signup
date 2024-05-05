@@ -42,7 +42,7 @@ export function signIn(
 
   return new Promise((resolve, reject) => {
     cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess: function (result: CognitoUserSession) {
+      onSuccess: function () {
         resolve({});
       },
 
