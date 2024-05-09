@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { getEventById } from '../dynamodb/client.js';
-import { apiResponse } from './response.js';
-import { getCognitoToken } from './utils.js';
+import { getEventById } from '../dynamodb/client';
+import { apiResponse } from './response';
+import { getCognitoToken } from './utils';
 
 const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const isValidToken = await getCognitoToken(event.headers.Authorization);

@@ -1,8 +1,8 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { getAllEvents } from '../dynamodb/client.js';
-import { apiResponse } from './response.js';
+import { getAllEvents } from '../dynamodb/client';
+import { apiResponse } from './response';
 import { Event } from './types';
-import { getCognitoToken } from './utils.js';
+import { getCognitoToken } from './utils';
 
 const FIND_ID_REGEX = /event_([0-9a-fA-F-]+)/;
 
