@@ -12,34 +12,42 @@ type Props = {
 const RegisterForm = (props: Props) => {
   type Register = {
     email: string;
-    newPassword: string;
-    repeatNewPassword: string;
+    password: string;
+    repeatPassword: string;
     nickname: string;
   };
 
   const initialValues = {
     email: "",
     nickname: "",
-    newPassword: "",
-    repeatNewPassword: "",
+    password: "",
+    repeatPassword: "",
   };
 
   const validationSchema = yup.object({
-    email: yup.string().email().required(),
-    newPassword: yup
+    email: yup.string().email().required("required field"),
+    password: yup
       .string()
-      .required()
-      .min(8, "Password must be at least 8 characters"),
-    repeatNewPassword: yup
+      .matches(/[A-Z]/, "Must contain an uppercase character")
+      .matches(/[a-z]/, "Must contain a lowercase character")
+      .matches(/\d/, "Must contain a number")
+      .matches(
+        /[!@#\$%\^&\*()\[\]\{\}\?\-"!@#%&\/\\,><':;\|_~`\+=\.]/,
+        "Must contain a symbol"
+      )
+      .min(8, "Password must be at least 8 characters")
+
+      .required("required field"),
+    repeatPassword: yup
       .string()
-      .required()
-      .oneOf([yup.ref("newPassword")], "Passwords must match"),
-    nickname: yup.string().required(),
+      .required("required field")
+      .oneOf([yup.ref("password")], "Passwords must match"),
+    nickname: yup.string().required("required field"),
   });
 
   const submitForm = async (values: Register) => {
     try {
-      await registerNewUser(values.email, values.newPassword, values.nickname);
+      await registerNewUser(values.email, values.password, values.nickname);
       props.setEmailToConfirm(values.email);
     } catch (error) {
       alert((error as Error).message);
@@ -72,21 +80,28 @@ const RegisterForm = (props: Props) => {
         />
         <FormError error={formik.errors.nickname} />
         <label className="my-1">Password</label>
+        <div className="text-xs">
+          <div>must contain atleast:</div>
+          <div>1 lowercase</div>
+          <div>1 uppercase</div>
+          <div>1 number</div>
+          <div>1 special character</div>
+        </div>
         <input
           className="shadow border rounded py-2 px-3 my-1 text-gray-700"
           type="password"
-          name="newPassword"
+          name="password"
           onChange={formik.handleChange}
         />
-        <FormError error={formik.errors.newPassword} />
+        <FormError error={formik.errors.password} />
         <label className="my-1">Enter password again</label>
         <input
           className="shadow border rounded py-2 px-3 my-1 text-gray-700"
           type="password"
-          name="repeatNewPassword"
+          name="repeatPassword"
           onChange={formik.handleChange}
         />
-        <FormError error={formik.errors.repeatNewPassword} />
+        <FormError error={formik.errors.repeatPassword} />
         <Button className="mt-2" type="submit">
           Create a new account
         </Button>
