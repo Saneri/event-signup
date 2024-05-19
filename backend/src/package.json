@@ -4,8 +4,8 @@
     "description": "Backend for event-signup project",
     "main": "app.js",
     "scripts": {
-        "lint": "eslint '*.ts'",
-        "lint:fix": "eslint '*.ts' --fix",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
         "test": "jest",
         "init-db": "tsx initDynamodb.ts"
     },
