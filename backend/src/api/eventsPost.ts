@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { postEvent } from '../dynamodb/client';
+import { addAttendeeToEvent, postEvent } from '../dynamodb/client';
 import { apiResponse } from './response';
 import { DynamoEvent } from './types';
 import { getCognitoToken } from './utils';
@@ -13,8 +13,8 @@ const validateEventBody = (requestBody: string | null): DynamoEvent | null => {
 };
 
 const eventsPost = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const isValidToken = await getCognitoToken(event.headers.Authorization);
-    if (!isValidToken) {
+    const userSub = await getCognitoToken(event.headers.Authorization);
+    if (!userSub) {
         return apiResponse(401, { message: 'Unauthorized' });
     }
 
@@ -23,7 +23,9 @@ const eventsPost = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyR
         if (!requestBody) {
             return apiResponse(400);
         }
-        await postEvent(requestBody);
+        const eventId = await postEvent(requestBody);
+        // automatically add the creator of the event as an attendee
+        await addAttendeeToEvent(eventId, userSub);
         return apiResponse(201);
     } catch (err) {
         console.error(err);

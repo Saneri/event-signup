@@ -70,11 +70,13 @@ export const getEventById = async (id: string): Promise<Record<string, Attribute
     return result.Item;
 };
 
-export const postEvent = async (body: DynamoEvent) => {
+export const postEvent = async (body: DynamoEvent): Promise<string> => {
+    const eventId = randomUUID();
+
     const itemToPut = {
         TableName: DYNAMO_TABLE_NAME,
         Item: {
-            PK: { S: `event_${randomUUID()}` },
+            PK: { S: `event_${eventId}` },
             SK: { S: 'meta' },
             name: { S: body.name },
             datetime: { S: body.datetime },
@@ -85,6 +87,7 @@ export const postEvent = async (body: DynamoEvent) => {
     };
 
     await client.send(new PutItemCommand(itemToPut));
+    return eventId;
 };
 
 export const getAllAttendees = async (eventId: string): Promise<Record<string, AttributeValue>[] | undefined> => {
@@ -120,6 +123,19 @@ export const editAttendee = async (body: DynamoAttendee, eventId: string, userSu
     };
 
     await client.send(new UpdateItemCommand(itemToUpdate));
+};
+
+export const addAttendeeToEvent = async (eventId: string, userSub: string): Promise<void> => {
+    const itemToPut = {
+        TableName: DYNAMO_TABLE_NAME,
+        Item: {
+            PK: { S: `event_${eventId}` },
+            SK: { S: `attendee_${userSub}` },
+            attending: { BOOL: true },
+        },
+    };
+
+    await client.send(new PutItemCommand(itemToPut));
 };
 
 export default client;
