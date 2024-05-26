@@ -3,6 +3,7 @@ import { addAttendeeToEvent, postEvent } from '../dynamodb/client';
 import { apiResponse } from './response';
 import { DynamoEvent } from './types';
 import { getCognitoToken } from './utils';
+import { getUserNickname } from '../auth/cognito';
 
 const validateEventBody = (requestBody: string | null): DynamoEvent | null => {
     const body = JSON.parse(requestBody || '{}');
@@ -13,8 +14,9 @@ const validateEventBody = (requestBody: string | null): DynamoEvent | null => {
 };
 
 const eventsPost = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const userSub = await getCognitoToken(event.headers.Authorization);
-    if (!userSub) {
+    const authHeader = event.headers.Authorization;
+    const userSub = await getCognitoToken(authHeader);
+    if (!authHeader || !userSub) {
         return apiResponse(401, { message: 'Unauthorized' });
     }
 
@@ -24,8 +26,13 @@ const eventsPost = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyR
             return apiResponse(400);
         }
         const eventId = await postEvent(requestBody);
+
         // automatically add the creator of the event as an attendee
-        await addAttendeeToEvent(eventId, userSub);
+        const name = await getUserNickname(authHeader.split(' ')[1]);
+        if (!name) {
+            console.error('Failed to get user nickname for user:', userSub);
+        }
+        await addAttendeeToEvent(eventId, userSub, name ?? 'Unknown');
         return apiResponse(201);
     } catch (err) {
         console.error(err);
