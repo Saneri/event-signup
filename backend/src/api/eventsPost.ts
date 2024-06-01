@@ -7,7 +7,12 @@ import { getUserNickname } from '../auth/cognito';
 
 const validateEventBody = (requestBody: string | null): DynamoEvent | null => {
     const body = JSON.parse(requestBody || '{}');
-    if (typeof body.name !== 'string' || isNaN(Date.parse(body.datetime)) || typeof body.description !== 'string') {
+    if (
+        typeof body.name !== 'string' ||
+        isNaN(Date.parse(body.datetime)) ||
+        typeof body.description !== 'string' ||
+        (body.expiryTimestamp !== null && isNaN(Date.parse(body.expiryTimestamp)))
+    ) {
         return null;
     }
     return body;
@@ -33,7 +38,8 @@ const eventsPost = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyR
             console.error('Failed to get user nickname for user:', userSub);
         }
         await addAttendeeToEvent(eventId, userSub, name ?? 'Unknown');
-        return apiResponse(201);
+
+        return apiResponse(201, { eventId });
     } catch (err) {
         console.error(err);
         return apiResponse(500);

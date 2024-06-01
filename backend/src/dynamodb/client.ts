@@ -73,7 +73,10 @@ export const getEventById = async (id: string): Promise<Record<string, Attribute
 export const postEvent = async (body: DynamoEvent): Promise<string> => {
     const eventId = randomUUID();
 
-    const itemToPut = {
+    const itemToPut: {
+        TableName: string;
+        Item: { [key: string]: { S: string } };
+    } = {
         TableName: DYNAMO_TABLE_NAME,
         Item: {
             PK: { S: `event_${eventId}` },
@@ -85,6 +88,10 @@ export const postEvent = async (body: DynamoEvent): Promise<string> => {
             },
         },
     };
+
+    if (body.expiryTimestamp) {
+        itemToPut.Item.expiryTimestamp = { S: body.expiryTimestamp };
+    }
 
     await client.send(new PutItemCommand(itemToPut));
     return eventId;

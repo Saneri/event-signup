@@ -2,6 +2,7 @@ export type DynamoEvent = {
     name: string;
     datetime: string;
     description: string;
+    expiryTimestamp: string | null;
 };
 
 export type Event = {

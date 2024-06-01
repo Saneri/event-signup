@@ -22,7 +22,11 @@ export const getEvent = async (id: string): Promise<Event | null> => {
   }
 };
 
-export const addEvent = async (event: Event): Promise<Event | null> => {
+export const addEvent = async (
+  event: Event & {
+    expiryTimestamp: string | null;
+  }
+): Promise<Event | null> => {
   try {
     const res: AxiosResponse<Event> = await instance.post("/events", event);
     return res.data;

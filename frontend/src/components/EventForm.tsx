@@ -4,15 +4,17 @@ import * as yup from "yup";
 import { addEvent } from "../services/events";
 import Button from "./common/Button";
 import FormError from "./common/FormError";
-import { Event } from "./types";
+import { EventFormValues } from "./types";
 
 const EventForm = () => {
   const navigate = useNavigate();
 
-  const initialValues: Event = {
+  const initialValues: EventFormValues = {
     name: "",
     datetime: "",
     description: "",
+    expiryTimestamp: null,
+    hasExpiry: false,
   };
 
   const validationSchema = yup.object({
@@ -20,8 +22,9 @@ const EventForm = () => {
     datetime: yup.string().required(),
   });
 
-  const submitForm = (values: Event) => {
-    addEvent(values);
+  const submitForm = (values: EventFormValues) => {
+    const { hasExpiry, ...valuesToSend } = values;
+    addEvent(valuesToSend);
     formik.resetForm();
     navigate("/");
   };
@@ -59,7 +62,27 @@ const EventForm = () => {
         name="description"
         onChange={formik.handleChange}
       />
-      <Button type="submit">Submit</Button>
+      <br />
+      <div></div>
+      <div className="flex items-center gap-1">
+        <input
+          type="checkbox"
+          name="hasExpiry"
+          onChange={formik.handleChange}
+        />
+        <label className="my-1">Add link expiration</label>
+      </div>
+      {formik.values.hasExpiry && (
+        <input
+          className="shadow border rounded py-2 px-3 my-1 text-gray-700"
+          type="datetime-local"
+          name="expiryTimestamp"
+          onChange={formik.handleChange}
+        />
+      )}
+      <Button className="mt-4" type="submit">
+        Submit
+      </Button>
     </form>
   );
 };
