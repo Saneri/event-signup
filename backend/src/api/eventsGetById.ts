@@ -1,7 +1,8 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { getEventById } from '../dynamodb/client';
 import { apiResponse } from './response';
-import { getCognitoToken } from './utils';
+import { Event } from './types';
+import { getCognitoToken, getEventIdFromPK } from './utils';
 
 const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const isValidToken = await getCognitoToken(event.headers.Authorization);
@@ -21,12 +22,14 @@ const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayPro
             return apiResponse(404);
         }
 
-        const transformedItem: Record<string, unknown> = {};
-        Object.keys(event).forEach((key) => {
-            transformedItem[key] = event[key].S;
-        });
+        const eventPayload: Event = {
+            name: event.name.S,
+            datetime: event.datetime.S,
+            description: event.description.S,
+            id: getEventIdFromPK(event.PK.S),
+        };
 
-        return apiResponse(200, transformedItem);
+        return apiResponse(200, eventPayload);
     } catch (err) {
         console.error(err);
         return apiResponse(500);

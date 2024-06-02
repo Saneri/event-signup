@@ -2,9 +2,7 @@ import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { getAllEvents } from '../dynamodb/client';
 import { apiResponse } from './response';
 import { Event } from './types';
-import { getCognitoToken } from './utils';
-
-const FIND_ID_REGEX = /event_([0-9a-fA-F-]+)/;
+import { getCognitoToken, getEventIdFromPK } from './utils';
 
 const eventsGet = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
     const userSub = await getCognitoToken(event.headers.Authorization);
@@ -24,7 +22,7 @@ const eventsGet = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult>
                 name: event.name.S,
                 description: event.description.S,
                 datetime: event.datetime.S,
-                id: event.PK.S?.match(FIND_ID_REGEX)?.[1],
+                id: getEventIdFromPK(event.PK.S),
             };
         });
 

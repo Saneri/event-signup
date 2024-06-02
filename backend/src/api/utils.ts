@@ -18,3 +18,16 @@ export const getCognitoToken = async (accessToken: string | undefined): Promise<
     }
     return userSub;
 };
+
+/**
+ * Extracts the event ID from a primary key which is of type "event_<UUID>".
+ * @param primaryKey - The primary key string.
+ * @returns The event ID extracted from the primary key, or undefined if the primary key is falsy.
+ */
+export const getEventIdFromPK = (primaryKey: string | undefined): string | undefined => {
+    if (!primaryKey) {
+        return undefined;
+    }
+    const FIND_ID_REGEX = /event_([0-9a-fA-F-]+)/;
+    return primaryKey.match(FIND_ID_REGEX)?.[1];
+};
