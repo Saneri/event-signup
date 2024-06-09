@@ -1,6 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { getEventById } from '../dynamodb/client';
-import { AuthorizationError } from './errors';
+import { getAttendee, getEventById } from '../dynamodb/client';
 import { apiResponse } from './response';
 import { Event } from './types';
 import { getCognitoToken, getEventIdFromPK } from './utils';
@@ -17,7 +16,11 @@ const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayPro
     }
 
     try {
-        const event = await getEventById(id, userSub);
+        const attended = await getAttendee(id, userSub);
+        if (!attended) {
+            return apiResponse(403);
+        }
+        const event = await getEventById(id);
 
         if (!event) {
             return apiResponse(404);
@@ -33,9 +36,6 @@ const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayPro
         return apiResponse(200, eventPayload);
     } catch (err) {
         console.error(err);
-        if (err instanceof AuthorizationError) {
-            return apiResponse(403);
-        }
         return apiResponse(500);
     }
 };
