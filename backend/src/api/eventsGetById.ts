@@ -14,16 +14,20 @@ const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayPro
     if (!id) {
         return apiResponse(400);
     }
+    const key = event.queryStringParameters?.key;
 
     try {
-        const attended = await getAttendee(id, userSub);
-        if (!attended) {
-            return apiResponse(403);
-        }
         const event = await getEventById(id);
-
         if (!event) {
             return apiResponse(404);
+        }
+
+        // If user is not an attendee in the event, then an invitation key is required
+        if (event.key?.S !== key) {
+            const attendee = await getAttendee(id, userSub);
+            if (!attendee) {
+                return apiResponse(403);
+            }
         }
 
         const eventPayload: Event = {
