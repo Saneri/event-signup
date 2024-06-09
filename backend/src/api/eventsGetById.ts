@@ -1,12 +1,13 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { getEventById } from '../dynamodb/client';
+import { AuthorizationError } from './errors';
 import { apiResponse } from './response';
 import { Event } from './types';
 import { getCognitoToken, getEventIdFromPK } from './utils';
 
 const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const isValidToken = await getCognitoToken(event.headers.Authorization);
-    if (!isValidToken) {
+    const userSub = await getCognitoToken(event.headers.Authorization);
+    if (!userSub) {
         return apiResponse(401, { message: 'Unauthorized' });
     }
 
@@ -16,7 +17,7 @@ const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayPro
     }
 
     try {
-        const event = await getEventById(id);
+        const event = await getEventById(id, userSub);
 
         if (!event) {
             return apiResponse(404);
@@ -32,6 +33,9 @@ const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayPro
         return apiResponse(200, eventPayload);
     } catch (err) {
         console.error(err);
+        if (err instanceof AuthorizationError) {
+            return apiResponse(403);
+        }
         return apiResponse(500);
     }
 };

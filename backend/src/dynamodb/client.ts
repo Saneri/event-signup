@@ -8,6 +8,7 @@ import {
     UpdateItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import { randomUUID } from 'crypto';
+import { AuthorizationError } from '../api/errors';
 import { DynamoAttendee, DynamoEvent } from '../api/types';
 
 const DYNAMO_TABLE_NAME = 'eventSignupTable';
@@ -58,7 +59,30 @@ export const getAllEvents = async (userSub: string): Promise<Record<string, Attr
     return eventResult.Responses?.[DYNAMO_TABLE_NAME];
 };
 
-export const getEventById = async (id: string): Promise<Record<string, AttributeValue> | undefined> => {
+/**
+ * Retrieves an event by its ID.
+ *
+ * @param id - The ID of the event.
+ * @param userSub - The user's sub provided by AWS Cognito.
+ * @returns A promise that resolves to the event item if found, or undefined if not found.
+ * @throws {AuthorizationError} If the user is not an attendee of the event.
+ */
+export const getEventById = async (
+    id: string,
+    userSub: string,
+): Promise<Record<string, AttributeValue> | undefined> => {
+    const attendeeParams = {
+        TableName: DYNAMO_TABLE_NAME,
+        Key: {
+            PK: { S: `event_${id}` },
+            SK: { S: `attendee_${userSub}` },
+        },
+    };
+    const attendeeResult = await client.send(new GetItemCommand(attendeeParams));
+
+    if (!attendeeResult.Item) {
+        throw new AuthorizationError('User is not authorized to view this event');
+    }
     const params = {
         TableName: DYNAMO_TABLE_NAME,
         Key: {
