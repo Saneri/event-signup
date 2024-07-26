@@ -13,3 +13,7 @@ The app is testable at https://d3da3lb7bhwbo0.cloudfront.net
 | Backend  | AWS Lambda |
 | Frontend |   React    |
 | Database |  DynamoDB  |
+
+## Architecture
+
+![architecture image](/doc/architecture.drawio.svg)
