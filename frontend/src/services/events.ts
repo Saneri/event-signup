@@ -12,9 +12,14 @@ export const getEvents = async (): Promise<Event[] | null> => {
   }
 };
 
-export const getEvent = async (id: string): Promise<Event | null> => {
+export const getEvent = async (
+  id: string,
+  key: string | null
+): Promise<Event | null> => {
   try {
-    const res: AxiosResponse<Event> = await instance.get(`/events/${id}`);
+    const res: AxiosResponse<Event> = await instance.get(`/events/${id}`, {
+      params: { key },
+    });
     return res.data;
   } catch (err) {
     console.error(err);
