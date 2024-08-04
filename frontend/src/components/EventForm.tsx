@@ -22,11 +22,15 @@ const EventForm = () => {
     datetime: yup.string().required(),
   });
 
-  const submitForm = (values: EventFormValues) => {
+  const submitForm = async (values: EventFormValues) => {
     const { hasExpiry, ...valuesToSend } = values;
-    addEvent(valuesToSend);
+    const eventId = await addEvent(valuesToSend);
+    if (!eventId) {
+      // TODO: show some failure message to user
+      return;
+    }
     formik.resetForm();
-    navigate("/");
+    navigate(`/events/${eventId}`);
   };
 
   const formik = useFormik({

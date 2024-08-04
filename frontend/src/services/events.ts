@@ -27,14 +27,23 @@ export const getEvent = async (
   }
 };
 
+/**
+ * Creates a new event.
+ *
+ * @param event - The event to be added with optional expiry time.
+ * @returns The ID of the added event, or null if an error occurred.
+ */
 export const addEvent = async (
   event: Event & {
     expiryTimestamp: string | null;
   }
-): Promise<Event | null> => {
+): Promise<string | null> => {
   try {
-    const res: AxiosResponse<Event> = await instance.post("/events", event);
-    return res.data;
+    const res: AxiosResponse<{ eventId: string }> = await instance.post(
+      "/events",
+      event
+    );
+    return res.data.eventId;
   } catch (err) {
     console.error(err);
     return null;
