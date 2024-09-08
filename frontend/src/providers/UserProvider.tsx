@@ -14,6 +14,7 @@ import { getCurrentSession, getCurrentUser } from "../auth/auth";
 type UserContextType = {
   user: CognitoUserAttribute[] | null;
   session: CognitoUserSession | null;
+  loading: boolean;
   fetchUser: () => Promise<void>;
 };
 
@@ -22,12 +23,15 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<CognitoUserAttribute[] | null>(null);
   const [session, setSession] = useState<CognitoUserSession | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchUser = async (): Promise<void> => {
+    setLoading(true);
     const userFromLocalStorage = await getCurrentUser();
     setUser(userFromLocalStorage ?? null);
     const session = await getCurrentSession();
     setSession(session);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -35,7 +39,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, session, fetchUser }}>
+    <UserContext.Provider value={{ user, session, loading, fetchUser }}>
       {children}
     </UserContext.Provider>
   );

@@ -116,7 +116,7 @@ export function getCurrentSession(): Promise<CognitoUserSession | null> {
       session: CognitoUserSession | null
     ) {
       if (err) {
-        alert(err.message || JSON.stringify(err));
+        alert("getSession error: " + err.message || JSON.stringify(err));
         return reject(err);
       }
 

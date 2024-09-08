@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar";
 import { UserProvider } from "./providers/UserProvider";
 import RegisterPage from "./pages/RegisterPage";
+import ProtectedRoute from "./auth/ProtectedRoute";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -16,25 +17,30 @@ const App = () => {
       errorElement: <ErrorElement />,
       children: [
         {
-          path: "/",
-          element: <BrowseEventsPage />,
-        },
-        {
-          path: "/create",
-          element: <CreateEventsPage />,
-        },
-        {
-          path: "/events/:id",
-          element: <EventPage />,
-          loader: eventLoader,
-        },
-        {
           path: "/login",
           element: <LoginPage />,
         },
         {
           path: "/register",
           element: <RegisterPage />,
+        },
+        {
+          element: <ProtectedRoute />,
+          children: [
+            {
+              path: "/",
+              element: <BrowseEventsPage />,
+            },
+            {
+              path: "/create",
+              element: <CreateEventsPage />,
+            },
+            {
+              path: "/events/:id",
+              element: <EventPage />,
+              loader: eventLoader,
+            },
+          ],
         },
       ],
     },
