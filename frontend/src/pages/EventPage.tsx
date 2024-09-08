@@ -18,7 +18,6 @@ export const eventLoader = async (args: Args): Promise<any> => {
   }
   // access key (or invitation link) for users who are not yet part of the event
   const key = new URL(args.request.url).searchParams.get("key");
-  console.log("key", key);
 
   return await Promise.all([getEvent(id, key), getAttendees(id), id]);
 };
