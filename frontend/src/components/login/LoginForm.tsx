@@ -1,10 +1,11 @@
 import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { signIn } from "../../auth/auth";
-import { AuthenticationError } from "./errors";
+import { useUser } from "../../providers/UserProvider";
 import Button from "../common/Button";
 import FormError from "../common/FormError";
-import { useNavigate } from "react-router-dom";
+import { AuthenticationError } from "./errors";
 
 type Login = {
   username: string;
@@ -13,6 +14,7 @@ type Login = {
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const { fetchUser } = useUser();
 
   const initialValues: Login = {
     username: "",
@@ -31,6 +33,7 @@ const LoginForm = () => {
         // This should only happen if admin creates a new user manually which should not happen
         alert("New password required. Please contact administrator.");
       } else {
+        await fetchUser();
         navigate("/");
       }
     } catch (error) {

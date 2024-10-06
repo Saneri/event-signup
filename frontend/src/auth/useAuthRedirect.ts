@@ -10,5 +10,5 @@ export function useAuthRedirect() {
     if (!loading && !session) {
       navigate("/login");
     }
-  }, [session, navigate]);
+  }, [session, loading, navigate]);
 }
