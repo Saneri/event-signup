@@ -185,6 +185,7 @@ Resources:
               Effect: Allow
               Action:
                 - dynamodb:UpdateItem
+                - dynamodb:PutItem
               Resource: "*"
     Metadata:
       BuildMethod: esbuild
