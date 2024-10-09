@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { apiResponse } from './response';
 import { getCognitoToken } from './utils';
 import { DynamoAttendee } from './types';
-import { editAttendee } from '../dynamodb/client';
+import { addAttendeeToEvent, editAttendee } from '../dynamodb/client';
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
 
 const validateEventBody = (requestBody: string | null): DynamoAttendee | null => {
@@ -13,6 +13,13 @@ const validateEventBody = (requestBody: string | null): DynamoAttendee | null =>
     return body;
 };
 
+/**
+ * Tries to update the attendance status of a attendee for an event.
+ * If the attendee does not exist, they are added to the event with the corresponding status.
+ *
+ * @param event The API Gateway event containing request data.
+ * @returns The result of the API call.
+ */
 const attendeesPut = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const userSub = await getCognitoToken(event.headers.Authorization);
     if (!userSub) {
@@ -21,22 +28,38 @@ const attendeesPut = async (event: APIGatewayProxyEvent): Promise<APIGatewayProx
 
     const eventId = event.pathParameters?.id;
     if (!eventId) {
-        return apiResponse(400);
+        return apiResponse(400, { message: 'Event id missing from path parameters' });
     }
 
+    const requestBody = validateEventBody(event.body);
+    if (!requestBody) {
+        return apiResponse(400, { message: 'Invalid request body' });
+    }
+    const attending = requestBody.attending;
+
     try {
-        const requestBody = validateEventBody(event.body);
-        if (!requestBody) {
-            return apiResponse(400);
-        }
-        await editAttendee(requestBody, eventId, userSub);
-        return apiResponse(200);
+        await editAttendee(attending, eventId, userSub);
+        return apiResponse(200, { message: 'Attendance status updated' });
     } catch (err) {
         if (err instanceof ConditionalCheckFailedException) {
-            return apiResponse(404, { message: 'User not found from the selected event' });
+            return handleConditionalCheckFailed(eventId, userSub, attending);
         }
-        console.error(err);
+        console.error('Error updating attendee:', err);
         return apiResponse(500);
+    }
+};
+
+const handleConditionalCheckFailed = async (
+    eventId: string,
+    userSub: string,
+    attending: boolean,
+): Promise<APIGatewayProxyResult> => {
+    try {
+        await addAttendeeToEvent(eventId, userSub, 'thisistodo', attending); // Replace 'thisistodo' with actual user name
+        return apiResponse(201, { message: 'User added to the event' });
+    } catch (error) {
+        console.error('Error adding attendee to event:', error);
+        return apiResponse(500, { message: 'Failed to add user to the event' });
     }
 };
 

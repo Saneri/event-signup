@@ -37,7 +37,7 @@ const eventsPost = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyR
         if (!name) {
             console.error('Failed to get user nickname for user:', userSub);
         }
-        await addAttendeeToEvent(eventId, userSub, name ?? 'Unknown');
+        await addAttendeeToEvent(eventId, userSub, name ?? 'Unknown', true);
 
         return apiResponse(201, { eventId });
     } catch (err) {

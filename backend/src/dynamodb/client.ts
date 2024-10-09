@@ -8,7 +8,7 @@ import {
     UpdateItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import { randomUUID, randomBytes } from 'crypto';
-import { DynamoAttendee, DynamoEvent } from '../api/types';
+import { DynamoEvent } from '../api/types';
 
 const DYNAMO_TABLE_NAME = 'eventSignupTable';
 
@@ -129,7 +129,7 @@ export const getAllAttendees = async (eventId: string): Promise<Record<string, A
     return result.Items;
 };
 
-export const editAttendee = async (body: DynamoAttendee, eventId: string, userSub: string): Promise<void> => {
+export const editAttendee = async (attending: boolean, eventId: string, userSub: string): Promise<void> => {
     const itemToUpdate = {
         TableName: DYNAMO_TABLE_NAME,
         Key: {
@@ -141,7 +141,7 @@ export const editAttendee = async (body: DynamoAttendee, eventId: string, userSu
             '#A': 'attending',
         },
         ExpressionAttributeValues: {
-            ':a': { BOOL: body.attending },
+            ':a': { BOOL: attending },
         },
         ConditionExpression: 'attribute_exists(PK) AND attribute_exists(SK)',
         ReturnValues: 'UPDATED_NEW',
@@ -150,14 +150,19 @@ export const editAttendee = async (body: DynamoAttendee, eventId: string, userSu
     await client.send(new UpdateItemCommand(itemToUpdate));
 };
 
-export const addAttendeeToEvent = async (eventId: string, userSub: string, name: string): Promise<void> => {
+export const addAttendeeToEvent = async (
+    eventId: string,
+    userSub: string,
+    name: string,
+    attending: boolean,
+): Promise<void> => {
     const itemToPut = {
         TableName: DYNAMO_TABLE_NAME,
         Item: {
             PK: { S: `event_${eventId}` },
             SK: { S: `attendee_${userSub}` },
             name: { S: name },
-            attending: { BOOL: true },
+            attending: { BOOL: attending },
         },
     };
 
