@@ -62,7 +62,7 @@ export const getEventById = async (id: string): Promise<Record<string, Attribute
     return result.Item;
 };
 
-export const postEvent = async (body: DynamoEvent): Promise<string> => {
+export const postEvent = async (body: DynamoEvent, admin: string): Promise<string> => {
     const eventId = randomUUID();
     const eventKey = randomBytes(5).toString('hex'); // generates an URL friendly random string of length 10
 
@@ -80,6 +80,7 @@ export const postEvent = async (body: DynamoEvent): Promise<string> => {
                 S: body.description,
             },
             key: { S: eventKey },
+            admin: { S: admin },
         },
     };
 

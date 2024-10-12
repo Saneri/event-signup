@@ -36,6 +36,7 @@ const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayPro
             datetime: event.datetime.S,
             description: event.description.S,
             id: getEventIdFromPK(event.PK.S),
+            admin: event.admin?.S === userSub,
         };
 
         return apiResponse(200, eventPayload);

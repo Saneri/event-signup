@@ -31,7 +31,7 @@ const eventsPost = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyR
         if (!requestBody) {
             return apiResponse(400);
         }
-        const eventId = await postEvent(requestBody);
+        const eventId = await postEvent(requestBody, userSub);
 
         // automatically add the creator of the event as an attendee
         const name = await getUserNickname(authHeader.split(' ')[1]);

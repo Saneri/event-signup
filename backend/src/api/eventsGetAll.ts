@@ -23,6 +23,7 @@ const eventsGet = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult>
                 description: event.description.S,
                 datetime: event.datetime.S,
                 id: getEventIdFromPK(event.PK.S),
+                admin: event.admin?.S === userSub,
             };
         });
 

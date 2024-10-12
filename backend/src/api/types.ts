@@ -10,6 +10,7 @@ export type Event = {
     datetime: string | undefined;
     description: string | undefined;
     id: string | undefined;
+    admin: boolean | undefined;
 };
 
 export type DynamoAttendee = {
