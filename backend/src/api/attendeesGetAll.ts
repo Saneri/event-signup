@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { getAllAttendees } from '../dynamodb/client';
+import { getAllAttendees } from '../dynamodb/attendeeService';
 import { apiResponse } from './response';
 import { getCognitoToken } from './utils';
 import { Attendee } from './types';

@@ -1,9 +1,10 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { addAttendeeToEvent, postEvent } from '../dynamodb/client';
+import { getUserNickname } from '../auth/cognito';
+import { addAttendeeToEvent } from '../dynamodb/attendeeService';
+import { postEvent } from '../dynamodb/eventService';
 import { apiResponse } from './response';
 import { DynamoEvent } from './types';
 import { getCognitoToken } from './utils';
-import { getUserNickname } from '../auth/cognito';
 
 const validateEventBody = (requestBody: string | null): DynamoEvent | null => {
     const body = JSON.parse(requestBody || '{}');

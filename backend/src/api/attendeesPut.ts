@@ -2,8 +2,8 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { apiResponse } from './response';
 import { getCognitoToken } from './utils';
 import { DynamoAttendee } from './types';
-import { addAttendeeToEvent, editAttendee } from '../dynamodb/client';
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
+import { addAttendeeToEvent, editAttendee } from '../dynamodb/attendeeService';
 
 const validateEventBody = (requestBody: string | null): DynamoAttendee | null => {
     const body = JSON.parse(requestBody || '{}');

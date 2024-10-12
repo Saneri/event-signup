@@ -1,4 +1,4 @@
-import { CreateTableCommand, DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { CreateTableCommand, CreateTableCommandInput, DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 
 const dynamo = new DynamoDBClient({
     endpoint: 'http://localhost:8000',
@@ -8,7 +8,7 @@ const dynamo = new DynamoDBClient({
 const DYNAMO_TABLE_NAME = 'eventSignupTable';
 
 const createTable = async () => {
-    const params = {
+    const params: CreateTableCommandInput = {
         TableName: DYNAMO_TABLE_NAME,
         KeySchema: [
             { AttributeName: 'PK', KeyType: 'HASH' },
