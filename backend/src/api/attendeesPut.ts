@@ -4,6 +4,7 @@ import { getCognitoToken } from './utils';
 import { DynamoAttendee } from './types';
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
 import { addAttendeeToEvent, editAttendee } from '../dynamodb/attendeeService';
+import { getUserNickname } from '../auth/cognito';
 
 const validateEventBody = (requestBody: string | null): DynamoAttendee | null => {
     const body = JSON.parse(requestBody || '{}');
@@ -21,8 +22,9 @@ const validateEventBody = (requestBody: string | null): DynamoAttendee | null =>
  * @returns The result of the API call.
  */
 const attendeesPut = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const userSub = await getCognitoToken(event.headers.Authorization);
-    if (!userSub) {
+    const authHeader = event.headers.Authorization;
+    const userSub = await getCognitoToken(authHeader);
+    if (!authHeader || !userSub) {
         return apiResponse(401, { message: 'Unauthorized' });
     }
 
@@ -42,7 +44,11 @@ const attendeesPut = async (event: APIGatewayProxyEvent): Promise<APIGatewayProx
         return apiResponse(200, { message: 'Attendance status updated' });
     } catch (err) {
         if (err instanceof ConditionalCheckFailedException) {
-            return handleConditionalCheckFailed(eventId, userSub, attending);
+            const name = await getUserNickname(authHeader.split(' ')[1]);
+            if (!name) {
+                console.error('Failed to get user nickname for user:', userSub);
+            }
+            return handleConditionalCheckFailed(eventId, userSub, attending, name ?? 'Unknown');
         }
         console.error('Error updating attendee:', err);
         return apiResponse(500);
@@ -53,9 +59,10 @@ const handleConditionalCheckFailed = async (
     eventId: string,
     userSub: string,
     attending: boolean,
+    name: string,
 ): Promise<APIGatewayProxyResult> => {
     try {
-        await addAttendeeToEvent(eventId, userSub, 'thisistodo', attending); // Replace 'thisistodo' with actual user name
+        await addAttendeeToEvent(eventId, userSub, name, attending);
         return apiResponse(201, { message: 'User added to the event' });
     } catch (error) {
         console.error('Error adding attendee to event:', error);
