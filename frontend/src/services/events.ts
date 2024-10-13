@@ -1,10 +1,10 @@
 import { AxiosResponse } from "axios";
-import { Event } from "../components/types";
+import { Event, EventDetails } from "../components/types";
 import instance from "./instance";
 
 export const getEvents = async (): Promise<Event[] | null> => {
   try {
-    const res = await instance.get("/events");
+    const res: AxiosResponse<Event[]> = await instance.get("/events");
     return res.data;
   } catch (err) {
     console.error(err);
@@ -15,11 +15,14 @@ export const getEvents = async (): Promise<Event[] | null> => {
 export const getEvent = async (
   id: string,
   key: string | null
-): Promise<Event | null> => {
+): Promise<EventDetails | null> => {
   try {
-    const res: AxiosResponse<Event> = await instance.get(`/events/${id}`, {
-      params: { key },
-    });
+    const res: AxiosResponse<EventDetails> = await instance.get(
+      `/events/${id}`,
+      {
+        params: { key },
+      }
+    );
     return res.data;
   } catch (err) {
     console.error(err);
