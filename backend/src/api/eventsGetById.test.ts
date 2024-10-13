@@ -115,6 +115,7 @@ describe('eventsGetById', () => {
                 datetime: '2023-10-10T10:00:00Z',
                 id: 'event123',
                 admin: true,
+                invitationKey: 'invitationKey',
             }),
         );
     });

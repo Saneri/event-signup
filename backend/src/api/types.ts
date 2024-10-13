@@ -10,7 +10,13 @@ export type Event = {
     datetime: string | undefined;
     description: string | undefined;
     id: string | undefined;
-    admin: boolean | undefined;
+};
+
+export type EventsGetAllResponsePayload = Event[];
+
+export type EventsGetByIdResponsePayload = Event & {
+    admin: boolean;
+    invitationKey?: string;
 };
 
 export type DynamoAttendee = {
