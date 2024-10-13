@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { getAttendee } from '../dynamodb/attendeeService';
 import { getEventById } from '../dynamodb/eventService';
 import { apiResponse } from './response';
-import { Event } from './types';
+import { EventsGetByIdResponsePayload } from './types';
 import { getCognitoToken, getEventIdFromPK } from './utils';
 
 const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -31,12 +31,20 @@ const eventsGetById = async (event: APIGatewayProxyEvent): Promise<APIGatewayPro
             }
         }
 
-        const eventPayload: Event = {
+        const adminData =
+            event.admin?.S === userSub
+                ? {
+                      admin: true,
+                      invitationKey: event.key?.S,
+                  }
+                : { admin: false };
+
+        const eventPayload: EventsGetByIdResponsePayload = {
             name: event.name.S,
             datetime: event.datetime.S,
             description: event.description.S,
-            id: getEventIdFromPK(event.PK.S),
-            admin: event.admin?.S === userSub,
+            id: event.PK?.S && getEventIdFromPK(event.PK.S),
+            ...adminData,
         };
 
         return apiResponse(200, eventPayload);
