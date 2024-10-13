@@ -1,11 +1,12 @@
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import AttendingControls from "../components/AttendingControls";
 import AttendeeList from "../components/AttendeeList";
-import { Event, Attendee } from "../components/types";
+import { Attendee, EventDetails } from "../components/types";
 import { getEvent } from "../services/events";
 import { getAttendees } from "../services/attendees";
 import { formatDateAndTime } from "../utils/date";
 import { useState } from "react";
+import InvitationLink from "../components/InvitationLink";
 
 type Args = LoaderFunctionArgs<{
   id: string;
@@ -23,8 +24,8 @@ export const eventLoader = async (args: Args): Promise<any> => {
 };
 
 const EventPage = () => {
-  const arr = useLoaderData() as (Event | Attendee[] | string | null)[];
-  const event = arr[0] as Event;
+  const arr = useLoaderData() as (EventDetails | Attendee[] | string | null)[];
+  const event = arr[0] as EventDetails;
   const [participants, setParticipants] = useState(arr[1] as Attendee[]);
   const eventId = arr[2] as string;
 
@@ -43,6 +44,15 @@ const EventPage = () => {
       <br />
       <h2>Attendees</h2>
       <AttendeeList participants={participants} />
+      <br />
+      {event.admin && (
+        <>
+          <h2>Admin section</h2>
+          {event.invitationKey && (
+            <InvitationLink invitationKey={event.invitationKey} />
+          )}
+        </>
+      )}
       <br />
       <div className=" bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <AttendingControls
