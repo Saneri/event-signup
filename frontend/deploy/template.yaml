@@ -19,13 +19,18 @@ Resources:
         Id: PublicReadPolicy
         Version: 2012-10-17
         Statement:
-          - Sid: PublicReadGetObject
+          - Sid: AllowCloudFrontAccess
             Effect: Allow
-            Principal: "*"
-            Action:
-              - "s3:GetObject"
-            Resource:
-              - !Sub "arn:aws:s3:::event-signup-dev/*"
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
+            Action: "s3:GetObject"
+            Resource: !Sub "arn:aws:s3:::event-signup-dev/*"
+
+  CloudFrontOriginAccessIdentity:
+    Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity"
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: "Access to S3 bucket only through CloudFront"
 
   CloudFront:
     Type: AWS::CloudFront::Distribution
@@ -35,7 +40,7 @@ Resources:
           - DomainName: !GetAtt S3Bucket.DomainName
             Id: MyS3Origin
             S3OriginConfig:
-              OriginAccessIdentity: ""
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
         Enabled: true
         DefaultRootObject: index.html
         DefaultCacheBehavior:
