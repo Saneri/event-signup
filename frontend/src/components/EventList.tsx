@@ -1,4 +1,6 @@
+import { useState } from "react";
 import Card from "./common/Card";
+import Toggle from "./common/Toggle";
 import { Event } from "./types";
 
 type Props = {
@@ -6,14 +8,28 @@ type Props = {
 };
 
 const EventList = (props: Props) => {
+  const now = new Date().toISOString();
+  const [showPastEvents, setShowPastEvents] = useState<boolean>(false);
+
+  const filteredEvents = showPastEvents
+    ? props.events
+    : props.events.filter((event) => event.datetime >= now);
+
   return (
-    <div className="flex flex-wrap justify-center gap-4">
-      {props.events
-        .sort((a, b) => a.datetime.localeCompare(b.datetime))
-        .map((event) => (
-          <Card key={event.id} event={event}></Card>
-        ))}
-    </div>
+    <>
+      <Toggle
+        title="Show past events"
+        isOn={showPastEvents}
+        onToggle={() => setShowPastEvents(!showPastEvents)}
+      />
+      <div className="flex flex-wrap justify-center gap-4">
+        {filteredEvents
+          .sort((a, b) => b.datetime.localeCompare(a.datetime))
+          .map((event) => (
+            <Card key={event.id} event={event}></Card>
+          ))}
+      </div>
+    </>
   );
 };
 
