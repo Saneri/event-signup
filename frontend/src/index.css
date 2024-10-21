@@ -6,3 +6,9 @@ body,
 html {
   font-family: "Montserrat", sans-serif;
 }
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}

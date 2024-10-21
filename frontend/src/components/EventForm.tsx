@@ -6,6 +6,12 @@ import Button from "./common/Button";
 import FormError from "./common/FormError";
 import { EventFormValues } from "./types";
 
+const isNotInThePast = (value: string) => {
+  const selectedDatetime = new Date(value);
+  const currentDatetime = new Date();
+  return selectedDatetime >= currentDatetime;
+};
+
 const EventForm = () => {
   const navigate = useNavigate();
 
@@ -19,14 +25,21 @@ const EventForm = () => {
 
   const validationSchema = yup.object({
     name: yup.string().required().min(3),
-    datetime: yup.string().required(),
+    datetime: yup
+      .string()
+      .required()
+      .test(
+        "is-not-in-the-past",
+        "The date and time cannot be in the past",
+        isNotInThePast
+      ),
   });
 
   const submitForm = async (values: EventFormValues) => {
     const { hasExpiry, ...valuesToSend } = values;
     const eventId = await addEvent(valuesToSend);
     if (!eventId) {
-      // TODO: show some failure message to user
+      alert("Failed to create event");
       return;
     }
     formik.resetForm();
