@@ -4,6 +4,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   selected?: boolean;
 }
 
+/**
+ *
+ * @deprecated Use the Button component from the ui package (shadcn) instead
+ */
 const Button = ({ selected, className, ...props }: ButtonProps) => {
   const backgroundClass = selected ? "bg-indigo-700" : "bg-indigo-500";
   return (

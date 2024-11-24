@@ -1,9 +1,10 @@
 import * as yup from "yup";
 import FormError from "../common/FormError";
 import { useFormik } from "formik";
-import Button from "../common/Button";
 import { registerNewUser } from "../../auth/auth";
 import { Dispatch, SetStateAction } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 type Props = {
   setEmailToConfirm: Dispatch<SetStateAction<string | undefined>>;
@@ -64,20 +65,10 @@ const RegisterForm = (props: Props) => {
     <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <form className="flex flex-col" onSubmit={formik.handleSubmit}>
         <label className="my-1">Email address</label>
-        <input
-          className="shadow border rounded py-2 px-3 my-1 text-gray-700"
-          type="email"
-          name="email"
-          onChange={formik.handleChange}
-        />
+        <Input type="email" name="email" onChange={formik.handleChange} />
         <FormError error={formik.errors.email} />
         <label className="my-1">Nickname</label>
-        <input
-          className="shadow border rounded py-2 px-3 my-1 text-gray-700"
-          type="text"
-          name="nickname"
-          onChange={formik.handleChange}
-        />
+        <Input type="text" name="nickname" onChange={formik.handleChange} />
         <FormError error={formik.errors.nickname} />
         <label className="my-1">Password</label>
         <div className="text-xs">
@@ -87,16 +78,10 @@ const RegisterForm = (props: Props) => {
           <div>1 number</div>
           <div>1 special character</div>
         </div>
-        <input
-          className="shadow border rounded py-2 px-3 my-1 text-gray-700"
-          type="password"
-          name="password"
-          onChange={formik.handleChange}
-        />
+        <Input type="password" name="password" onChange={formik.handleChange} />
         <FormError error={formik.errors.password} />
         <label className="my-1">Enter password again</label>
-        <input
-          className="shadow border rounded py-2 px-3 my-1 text-gray-700"
+        <Input
           type="password"
           name="repeatPassword"
           onChange={formik.handleChange}
