@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { signIn } from "../../auth/auth";
 import { useUser } from "../../providers/UserProvider";
-import Button from "../common/Button";
 import FormError from "../common/FormError";
 import { AuthenticationError } from "./errors";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 type Login = {
   username: string;
@@ -55,20 +56,14 @@ const LoginForm = () => {
     <div className="flex flex-col bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <form className="flex flex-col" onSubmit={formik.handleSubmit}>
         <label className="my-1">Username</label>
-        <input
-          className="shadow border rounded py-2 px-3 my-1 text-gray-700"
+        <Input
           type="text"
           name="username"
           onChange={formik.handleChange}
-        />
+        ></Input>
         <FormError error={formik.errors.username} />
         <label className="my-1">Password</label>
-        <input
-          className="shadow border rounded py-2 px-3 my-1 text-gray-700"
-          type="password"
-          name="password"
-          onChange={formik.handleChange}
-        />
+        <Input type="password" name="password" onChange={formik.handleChange} />
         <FormError error={formik.errors.password} />
         <Button className="mt-2" type="submit">
           Sign in
