@@ -56,11 +56,7 @@ const LoginForm = () => {
     <div className="flex flex-col bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <form className="flex flex-col" onSubmit={formik.handleSubmit}>
         <label className="my-1">Username</label>
-        <Input
-          type="text"
-          name="username"
-          onChange={formik.handleChange}
-        ></Input>
+        <Input type="text" name="username" onChange={formik.handleChange} />
         <FormError error={formik.errors.username} />
         <label className="my-1">Password</label>
         <Input type="password" name="password" onChange={formik.handleChange} />
