@@ -2,9 +2,10 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { addEvent } from "../services/events";
-import Button from "./common/Button";
 import FormError from "./common/FormError";
 import { EventFormValues } from "./types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const isNotInThePast = (value: string) => {
   const selectedDatetime = new Date(value);
@@ -58,7 +59,7 @@ const EventForm = () => {
       onSubmit={formik.handleSubmit}
     >
       <label className="my-1">Event Name</label>
-      <input
+      <Input
         className="shadow border rounded py-2 px-3 my-1 text-gray-700"
         type="text"
         name="name"
@@ -66,7 +67,7 @@ const EventForm = () => {
       />
       <FormError error={formik.errors.name} />
       <label className="my-1">Date and Time</label>
-      <input
+      <Input
         className="shadow border rounded py-2 px-3 my-1 text-gray-700"
         type="datetime-local"
         name="datetime"
@@ -90,8 +91,7 @@ const EventForm = () => {
         <label className="my-1">Add link expiration</label>
       </div>
       {formik.values.hasExpiry && (
-        <input
-          className="shadow border rounded py-2 px-3 my-1 text-gray-700"
+        <Input
           type="datetime-local"
           name="expiryTimestamp"
           onChange={formik.handleChange}

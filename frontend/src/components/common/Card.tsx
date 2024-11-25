@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { formatDateAndTime } from "../../utils/date";
 import { Event } from "../types";
-import Button from "./Button";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   event: Event;

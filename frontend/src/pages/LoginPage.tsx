@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import LoginForm from "../components/login/LoginForm";
 import { useUser } from "../providers/UserProvider";
-import Button from "../components/common/Button";
+import { Button } from "@/components/ui/button";
 
 const LoginPage = () => {
   const { user } = useUser();

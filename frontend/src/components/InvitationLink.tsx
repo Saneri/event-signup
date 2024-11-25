@@ -1,6 +1,6 @@
 import ClipboardJS from "clipboard";
-import Button from "./common/Button";
 import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
 
 type InvitationLinkProps = {
   invitationKey: string;

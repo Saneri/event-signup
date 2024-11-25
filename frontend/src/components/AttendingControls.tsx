@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { editAttendee } from "../services/attendees";
-import Button from "./common/Button";
+import { Button } from "@/components/ui/button";
 
 type AttendingControlsProps = {
   onAttendingChange: () => void;
@@ -27,19 +27,17 @@ const AttendingControls = ({
   };
 
   return (
-    <div className="flex flex-col rounded-md shadow-sm" role="group">
+    <div className="flex rounded-md space-x-2 justify-center" role="group">
       <Button
-        type="button"
         onClick={() => handleClick(true)}
-        selected={attending === true}
+        variant={attending ? "default" : "outline"}
         disabled={loading}
       >
         Attending ✅
       </Button>
       <Button
-        type="button"
         onClick={() => handleClick(false)}
-        selected={attending === false}
+        variant={attending ? "outline" : "default"}
         disabled={loading}
       >
         Not attending ❌

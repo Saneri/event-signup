@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import EventList from "../components/EventList";
 import { getEvents } from "../services/events";
-import Button from "../components/common/Button";
+import { Button } from "@/components/ui/button";
 
 const BrowseEventsPage = () => {
   const { isLoading, error, data } = useQuery("event", () => {
