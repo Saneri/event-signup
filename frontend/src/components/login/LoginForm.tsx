@@ -29,19 +29,15 @@ const LoginForm = () => {
 
   const submitForm = async (values: Login) => {
     try {
-      const signInOutcome = await signIn(values.username, values.password);
-      if (signInOutcome.newPasswordRequired) {
-        // This should only happen if admin creates a new user manually which should not happen
-        alert("New password required. Please contact administrator.");
-      } else {
-        await fetchUser();
-        navigate("/");
-      }
+      await signIn(values.username, values.password);
+      await fetchUser();
+      navigate("/");
     } catch (error) {
+      console.log(error);
       if (error instanceof AuthenticationError) {
         alert("Incorrect username or password, please try again");
       } else {
-        alert("unknown error");
+        alert("unknown login error");
       }
     }
   };

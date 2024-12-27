@@ -1,5 +1,4 @@
 import {
-  AuthenticationDetails,
   CognitoUser,
   CognitoUserAttribute,
   CognitoUserPool,
@@ -7,6 +6,8 @@ import {
   ISignUpResult,
 } from "amazon-cognito-identity-js";
 import { AuthenticationError } from "../components/login/errors";
+import { signIn as amplifySignIn } from "aws-amplify/auth";
+import { Amplify } from "aws-amplify";
 
 const PICTURE_PLACEHOLDER_STRING = "placeholder";
 
@@ -15,47 +16,43 @@ const poolData = {
   ClientId: import.meta.env.VITE_CLIENT_ID,
 };
 
+Amplify.configure({
+  Auth: {
+    Cognito: {
+      userPoolClientId: import.meta.env.VITE_CLIENT_ID,
+      userPoolId: import.meta.env.VITE_USER_POOL_ID,
+    },
+  },
+});
+
 // global variable to keep the same user session between sign-in and new password challenge
 let userWithSession: CognitoUser | null = null;
 
 type SignInOutcome = {
-  cognitoUser?: CognitoUser;
   newPasswordRequired?: boolean;
 };
 
-export function signIn(
+export async function signIn(
   username: string,
   password: string
 ): Promise<SignInOutcome> {
-  const authenticationData = {
-    Username: username,
-    Password: password,
-  };
-  const authenticationDetails = new AuthenticationDetails(authenticationData);
-
-  const userPool = new CognitoUserPool(poolData);
-  const userData = {
-    Username: username,
-    Pool: userPool,
-  };
-  const cognitoUser = new CognitoUser(userData);
-
-  return new Promise((resolve, reject) => {
-    cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess: function () {
-        resolve({});
-      },
-
-      onFailure: function (err: Error) {
-        reject(new AuthenticationError(err.message || JSON.stringify(err)));
-      },
-
-      newPasswordRequired: function () {
-        userWithSession = cognitoUser;
-        resolve({ cognitoUser, newPasswordRequired: true });
-      },
+  try {
+    const { nextStep } = await amplifySignIn({
+      username,
+      password,
     });
-  });
+    return {
+      newPasswordRequired: !nextStep.signInStep,
+    };
+  } catch (error: any) {
+    if (error.code === "NotAuthorizedException") {
+      throw new AuthenticationError();
+    } else if (error.code === "UserNotFoundException") {
+      throw new AuthenticationError();
+    } else {
+      throw new Error(error.message);
+    }
+  }
 }
 
 export function signOut(): void {
