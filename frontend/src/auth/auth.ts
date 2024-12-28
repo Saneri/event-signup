@@ -1,14 +1,10 @@
-import {
-  CognitoUser,
-  CognitoUserAttribute,
-  CognitoUserPool,
-  ISignUpResult,
-} from "amazon-cognito-identity-js";
+import { CognitoUser, CognitoUserPool } from "amazon-cognito-identity-js";
 import { AuthenticationError } from "../components/login/errors";
 import {
   signIn as amplifySignIn,
   getCurrentUser,
   AuthUser,
+  signUp,
 } from "aws-amplify/auth";
 import { Amplify } from "aws-amplify";
 
@@ -64,45 +60,21 @@ export async function fetchCurrentUser(): Promise<AuthUser | null> {
   }
 }
 
-export function registerNewUser(
+export async function registerNewUser(
   email: string,
   password: string,
   nickname: string
-): Promise<CognitoUser> {
-  return new Promise((resolve, reject) => {
-    const emailAttribute = new CognitoUserAttribute({
-      Name: "email",
-      Value: email,
-    });
-    const nickNameAttribute = new CognitoUserAttribute({
-      Name: "nickname",
-      Value: nickname,
-    });
-    const pictureAttribute = new CognitoUserAttribute({
-      Name: "picture",
-      Value: PICTURE_PLACEHOLDER_STRING,
-    });
-
-    const userPool = new CognitoUserPool(poolData);
-    userPool.signUp(
-      email,
-      password,
-      [emailAttribute, nickNameAttribute, pictureAttribute],
-      [],
-      function (err?: Error, result?: ISignUpResult) {
-        if (err) {
-          return reject(
-            new AuthenticationError(err.message || JSON.stringify(err))
-          );
-        }
-
-        if (!result) {
-          return reject(new Error("No result"));
-        }
-
-        resolve(result.user);
-      }
-    );
+): Promise<void> {
+  await signUp({
+    username: email,
+    password,
+    options: {
+      userAttributes: {
+        picture: PICTURE_PLACEHOLDER_STRING,
+        nickname,
+        email,
+      },
+    },
   });
 }
 
