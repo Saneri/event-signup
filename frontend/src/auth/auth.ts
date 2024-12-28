@@ -1,19 +1,14 @@
-import { CognitoUser, CognitoUserPool } from "amazon-cognito-identity-js";
 import { AuthenticationError } from "../components/login/errors";
 import {
   signIn as amplifySignIn,
   getCurrentUser,
   AuthUser,
   signUp,
+  confirmSignUp,
 } from "aws-amplify/auth";
 import { Amplify } from "aws-amplify";
 
 const PICTURE_PLACEHOLDER_STRING = "placeholder";
-
-const poolData = {
-  UserPoolId: import.meta.env.VITE_USER_POOL_ID,
-  ClientId: import.meta.env.VITE_CLIENT_ID,
-};
 
 Amplify.configure({
   Auth: {
@@ -78,19 +73,9 @@ export async function registerNewUser(
   });
 }
 
-export function confirmRegistration(
+export async function confirmRegistration(
   username: string,
-  code: string
+  confirmationCode: string
 ): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const userPool = new CognitoUserPool(poolData);
-    const cognitoUser = new CognitoUser({ Username: username, Pool: userPool });
-
-    cognitoUser.confirmRegistration(code, true, function (err: Error) {
-      if (err) {
-        return reject(err);
-      }
-      resolve();
-    });
-  });
+  confirmSignUp({ username, confirmationCode });
 }
