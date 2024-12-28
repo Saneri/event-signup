@@ -44,7 +44,10 @@ describe("useAuthRedirect", () => {
   });
 
   it("should not redirect if session is present", () => {
-    (useUser as Mock).mockReturnValue({ session: {}, loading: false });
+    (useUser as Mock).mockReturnValue({
+      session: { userSub: "sub" },
+      loading: false,
+    });
 
     renderHook(() => useAuthRedirect());
 
