@@ -5,12 +5,8 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  AuthUser,
-  getCurrentUser,
-  fetchAuthSession,
-  AuthSession,
-} from "aws-amplify/auth";
+import { AuthUser, fetchAuthSession, AuthSession } from "aws-amplify/auth";
+import { fetchCurrentUser } from "@/auth/auth";
 
 type UserContextType = {
   user: AuthUser | null;
@@ -28,8 +24,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const fetchUser = async (): Promise<void> => {
     setLoading(true);
-    const userFromLocalStorage = await getCurrentUser();
-    setUser(userFromLocalStorage ?? null);
+    const userFromLocalStorage = await fetchCurrentUser();
+    setUser(userFromLocalStorage);
     const session = await fetchAuthSession();
     setSession(session);
     setLoading(false);

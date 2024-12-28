@@ -7,7 +7,7 @@ export function useAuthRedirect() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !session) {
+    if (!loading && !session?.userSub) {
       navigate("/login");
     }
   }, [session, loading, navigate]);

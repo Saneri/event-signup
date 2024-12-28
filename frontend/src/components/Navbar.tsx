@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { signOut } from "../auth/auth";
 import { useUser } from "../providers/UserProvider";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -11,13 +10,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { signOut } from "aws-amplify/auth";
 
 const Navbar = () => {
   const { user, fetchUser } = useUser();
   const email = user?.signInDetails?.loginId;
 
-  function logout() {
-    signOut();
+  async function logout() {
+    await signOut();
     fetchUser();
   }
 
