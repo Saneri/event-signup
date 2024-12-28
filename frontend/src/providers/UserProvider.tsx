@@ -1,19 +1,20 @@
 import {
-  CognitoUserAttribute,
-  CognitoUserSession,
-} from "amazon-cognito-identity-js";
-import {
   ReactNode,
   createContext,
   useContext,
   useEffect,
   useState,
 } from "react";
-import { getCurrentSession, getCurrentUser } from "../auth/auth";
+import {
+  AuthUser,
+  getCurrentUser,
+  fetchAuthSession,
+  AuthSession,
+} from "aws-amplify/auth";
 
 type UserContextType = {
-  user: CognitoUserAttribute[] | null;
-  session: CognitoUserSession | null;
+  user: AuthUser | null;
+  session: AuthSession | null;
   loading: boolean;
   fetchUser: () => Promise<void>;
 };
@@ -21,15 +22,15 @@ type UserContextType = {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<CognitoUserAttribute[] | null>(null);
-  const [session, setSession] = useState<CognitoUserSession | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [session, setSession] = useState<AuthSession | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchUser = async (): Promise<void> => {
     setLoading(true);
     const userFromLocalStorage = await getCurrentUser();
     setUser(userFromLocalStorage ?? null);
-    const session = await getCurrentSession();
+    const session = await fetchAuthSession();
     setSession(session);
     setLoading(false);
   };

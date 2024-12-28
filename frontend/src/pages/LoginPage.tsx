@@ -7,9 +7,7 @@ const LoginPage = () => {
   const { user } = useUser();
 
   if (user) {
-    const email = user
-      ?.find((attribute) => attribute.getName() === "email")
-      ?.getValue();
+    const email = user.signInDetails?.loginId;
     return (
       <div className="flex flex-col items-center gap-4">
         <div>You are logged in as {email}</div>
