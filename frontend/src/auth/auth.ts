@@ -2,7 +2,6 @@ import {
   CognitoUser,
   CognitoUserAttribute,
   CognitoUserPool,
-  CognitoUserSession,
   ISignUpResult,
 } from "amazon-cognito-identity-js";
 import { AuthenticationError } from "../components/login/errors";
@@ -29,11 +28,8 @@ Amplify.configure({
   },
 });
 
-// global variable to keep the same user session between sign-in and new password challenge
-let userWithSession: CognitoUser | null = null;
-
 type SignInOutcome = {
-  newPasswordRequired?: boolean;
+  emailConfirmation: boolean;
 };
 
 export async function signIn(
@@ -45,9 +41,10 @@ export async function signIn(
       username,
       password,
     });
-    return {
-      newPasswordRequired: !nextStep.signInStep,
-    };
+    if (nextStep.signInStep === "CONFIRM_SIGN_UP") {
+      return { emailConfirmation: true };
+    }
+    return { emailConfirmation: false };
   } catch (error: any) {
     if (error.code === "NotAuthorizedException") {
       throw new AuthenticationError();
@@ -65,30 +62,6 @@ export async function fetchCurrentUser(): Promise<AuthUser | null> {
   } catch (error) {
     return null;
   }
-}
-
-export function completeNewPasswordChallenge(
-  newPassword: string,
-  nickname: string
-): Promise<CognitoUserSession> {
-  return new Promise((resolve, reject) => {
-    if (!userWithSession) {
-      return reject(new Error("No user"));
-    }
-    userWithSession.completeNewPasswordChallenge(
-      newPassword,
-      { nickname, picture: PICTURE_PLACEHOLDER_STRING },
-      {
-        onSuccess: function (session: CognitoUserSession) {
-          resolve(session);
-        },
-
-        onFailure: function (err: Error) {
-          reject(new AuthenticationError(err.message || JSON.stringify(err)));
-        },
-      }
-    );
-  });
 }
 
 export function registerNewUser(

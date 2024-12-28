@@ -29,9 +29,16 @@ const LoginForm = () => {
 
   const submitForm = async (values: Login) => {
     try {
-      await signIn(values.username, values.password);
-      await fetchUser();
-      navigate("/");
+      const { emailConfirmation } = await signIn(
+        values.username,
+        values.password
+      );
+      if (emailConfirmation) {
+        navigate("/register", { state: { username: values.username } });
+      } else {
+        await fetchUser();
+        navigate("/");
+      }
     } catch (error) {
       if (error instanceof AuthenticationError) {
         alert("Incorrect username or password, please try again");
