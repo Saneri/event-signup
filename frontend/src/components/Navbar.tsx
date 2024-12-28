@@ -14,9 +14,7 @@ import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const { user, fetchUser } = useUser();
-  const email = user
-    ?.find((attribute) => attribute.getName() === "email")
-    ?.getValue();
+  const email = user?.signInDetails?.loginId;
 
   function logout() {
     signOut();

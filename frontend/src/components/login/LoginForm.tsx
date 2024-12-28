@@ -33,7 +33,6 @@ const LoginForm = () => {
       await fetchUser();
       navigate("/");
     } catch (error) {
-      console.log(error);
       if (error instanceof AuthenticationError) {
         alert("Incorrect username or password, please try again");
       } else {
