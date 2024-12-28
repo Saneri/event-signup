@@ -6,7 +6,11 @@ import {
   ISignUpResult,
 } from "amazon-cognito-identity-js";
 import { AuthenticationError } from "../components/login/errors";
-import { signIn as amplifySignIn } from "aws-amplify/auth";
+import {
+  signIn as amplifySignIn,
+  getCurrentUser,
+  AuthUser,
+} from "aws-amplify/auth";
 import { Amplify } from "aws-amplify";
 
 const PICTURE_PLACEHOLDER_STRING = "placeholder";
@@ -55,12 +59,11 @@ export async function signIn(
   }
 }
 
-export function signOut(): void {
-  const userPool = new CognitoUserPool(poolData);
-  const cognitoUser = userPool.getCurrentUser();
-
-  if (cognitoUser) {
-    cognitoUser.signOut();
+export async function fetchCurrentUser(): Promise<AuthUser | null> {
+  try {
+    return await getCurrentUser();
+  } catch (error) {
+    return null;
   }
 }
 
