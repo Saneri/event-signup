@@ -18,9 +18,9 @@ const InvitationLink = (props: InvitationLinkProps) => {
       <h3>
         Send to following link to anyone you want to invite to this event.
       </h3>
-      <text id="link" className="break-all">
+      <div id="link" className="break-all">
         {invitationLink}
-      </text>
+      </div>
       <br></br>
       <Button data-clipboard-target="#link">Copy invite link</Button>
     </div>

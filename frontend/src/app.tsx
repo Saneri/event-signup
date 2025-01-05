@@ -9,6 +9,32 @@ import Navbar from "./components/Navbar";
 import { UserProvider } from "./providers/UserProvider";
 import RegisterPage from "./pages/RegisterPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
+import { Amplify } from "aws-amplify";
+
+const redirectUri = import.meta.env.VITE_LOGIN_REDIRECT_URI;
+
+Amplify.configure({
+  Auth: {
+    Cognito: {
+      userPoolClientId: import.meta.env.VITE_CLIENT_ID,
+      userPoolId: import.meta.env.VITE_USER_POOL_ID,
+      loginWith: {
+        oauth: {
+          domain: "event-signup.auth.eu-west-1.amazoncognito.com",
+          redirectSignIn: [redirectUri],
+          redirectSignOut: [redirectUri],
+          responseType: "code",
+          scopes: [
+            "email",
+            "profile",
+            "openid",
+            "aws.cognito.signin.user.admin",
+          ],
+        },
+      },
+    },
+  },
+});
 
 const App = () => {
   const router = createBrowserRouter([

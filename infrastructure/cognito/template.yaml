@@ -57,3 +57,48 @@ Resources:
         - email
         - nickname
         - picture
+      AllowedOAuthFlows:
+        - code
+      AllowedOAuthScopes:
+        - openid
+        - profile
+        - email
+        - aws.cognito.signin.user.admin
+      CallbackURLs:
+        - https://d3da3lb7bhwbo0.cloudfront.net
+        - http://localhost:5173
+      LogoutURLs:
+        - https://d3da3lb7bhwbo0.cloudfront.net
+        - http://localhost:5173
+      SupportedIdentityProviders:
+        - COGNITO
+        - Google
+
+  CognitoUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: event-signup
+      UserPoolId:
+        Ref: CognitoUserPool
+
+  CognitoIdentityProviderGoogle:
+    Type: AWS::Cognito::UserPoolIdentityProvider
+    Properties:
+      ProviderName: Google
+      UserPoolId:
+        Ref: CognitoUserPool
+      ProviderType: Google
+      AttributeMapping:
+        email: email
+        nickname: name
+        picture: picture
+        username: sub
+      ProviderDetails:
+        client_id: 13411276300-h1a45gn9qt4c3g64apsc4vl8pbov5t6o.apps.googleusercontent.com
+        client_secret: !Ref GoogleClientSecret
+        authorize_scopes: "openid profile email"
+
+Parameters:
+  GoogleClientSecret:
+    Type: String
+    Description: The client secret for Google OAuth

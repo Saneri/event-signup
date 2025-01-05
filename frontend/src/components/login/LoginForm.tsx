@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { signIn } from "../../auth/auth";
+import { signIn, signInWithGoogle } from "../../auth/auth";
 import { useUser } from "../../providers/UserProvider";
 import FormError from "../common/FormError";
 import { AuthenticationError } from "./errors";
@@ -69,6 +69,9 @@ const LoginForm = () => {
       </form>
       <Button className="mt-2" onClick={() => navigate("/register")}>
         Register
+      </Button>
+      <Button className="mt-2" onClick={signInWithGoogle}>
+        Google
       </Button>
     </div>
   );

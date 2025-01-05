@@ -14,7 +14,7 @@ import { signOut } from "aws-amplify/auth";
 
 const Navbar = () => {
   const { user, fetchUser } = useUser();
-  const email = user?.signInDetails?.loginId;
+  const nickname = user?.nickname;
 
   async function logout() {
     await signOut();
@@ -31,15 +31,15 @@ const Navbar = () => {
         </a>
         <ul className="flex flex-wrap items-center gap-4 text-lg">
           <li>
-            {email ? (
+            {nickname ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button className="flex items-center space-x-2">
                     <Avatar className="h-6 w-6">
-                      <AvatarImage src={""} alt={email} />
-                      <AvatarFallback>{email.charAt(0)}</AvatarFallback>
+                      <AvatarImage src={""} alt={nickname} />
+                      <AvatarFallback>{nickname.charAt(0)}</AvatarFallback>
                     </Avatar>
-                    <span>{email}</span>
+                    <span>{nickname}</span>
                     <ChevronDown className="h-4 w-4 opacity-50" />
                   </Button>
                 </DropdownMenuTrigger>

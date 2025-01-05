@@ -5,19 +5,10 @@ import {
   AuthUser,
   signUp,
   confirmSignUp,
+  signInWithRedirect,
 } from "aws-amplify/auth";
-import { Amplify } from "aws-amplify";
 
 const PICTURE_PLACEHOLDER_STRING = "placeholder";
-
-Amplify.configure({
-  Auth: {
-    Cognito: {
-      userPoolClientId: import.meta.env.VITE_CLIENT_ID,
-      userPoolId: import.meta.env.VITE_USER_POOL_ID,
-    },
-  },
-});
 
 type SignInOutcome = {
   emailConfirmation: boolean;
@@ -78,4 +69,12 @@ export async function confirmRegistration(
   confirmationCode: string
 ): Promise<void> {
   confirmSignUp({ username, confirmationCode });
+}
+
+export async function signInWithGoogle() {
+  try {
+    await signInWithRedirect({ provider: "Google" });
+  } catch (error) {
+    console.error(error);
+  }
 }
