@@ -20,9 +20,9 @@ const EventList = (props: Props) => {
   return (
     <Card className="p-4">
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between">
+        <div className="flex justify-between space-x-4">
           <div className="text-2xl">Events</div>
-          <div className="flex items-center space-x-2 ">
+          <div className="flex items-center space-x-2">
             <Label htmlFor="show-past-events">Show past events</Label>
             <Switch
               id="show-past-events"

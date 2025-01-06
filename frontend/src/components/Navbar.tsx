@@ -40,7 +40,7 @@ const Navbar = () => {
                         {user.nickname?.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
-                    <span>{user.nickname}</span>
+                    <span className="hidden sm:inline">{user.nickname}</span>
                     <ChevronDown className="h-4 w-4 opacity-50" />
                   </Button>
                 </DropdownMenuTrigger>
