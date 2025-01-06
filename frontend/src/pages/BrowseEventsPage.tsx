@@ -5,18 +5,16 @@ import { getEvents } from "../services/events";
 import { Button } from "@/components/ui/button";
 
 const BrowseEventsPage = () => {
-  const { isLoading, error, data } = useQuery("event", () => {
-    return getEvents();
-  });
+  const { isLoading, error, data } = useQuery("event", getEvents);
 
   if (isLoading) return <div>Loading...</div>;
 
   if (error) return <div>An error has occurred</div>;
 
   return (
-    <div>
-      <Link className="flex justify-center my-10" to="/create">
-        <Button>Create new event</Button>
+    <div className="flex flex-col gap-4">
+      <Link className="flex justify-left" to="/create">
+        <Button>Create event</Button>
       </Link>
       {data == null || !data.length ? (
         <h1>No Events yet</h1>

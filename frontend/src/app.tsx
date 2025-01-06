@@ -74,7 +74,7 @@ const App = () => {
 
   function NavbarWrapper() {
     return (
-      <div className="px-5 sm:px-20">
+      <div className="px-5 sm:px-20 min-h-screen bg-stone-100">
         <Navbar />
         <Outlet />
       </div>
