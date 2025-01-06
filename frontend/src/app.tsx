@@ -74,23 +74,19 @@ const App = () => {
 
   function NavbarWrapper() {
     return (
-      <>
+      <div className="px-5 sm:px-20">
         <Navbar />
-        <div className="sm:p-20">
-          <Outlet />
-        </div>
-      </>
+        <Outlet />
+      </div>
     );
   }
 
   function ErrorElement() {
     return (
-      <>
+      <div className="px-5 sm:px-20">
         <Navbar />
-        <div className="sm:p-20">
-          <ErrorPage />
-        </div>
-      </>
+        <ErrorPage />
+      </div>
     );
   }
 

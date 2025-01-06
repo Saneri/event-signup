@@ -21,8 +21,8 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="sm:px-20 h-28">
-      <div className="flex flex-wrap items-center justify-between px-4 h-full">
+    <nav className="h-28">
+      <div className="flex flex-wrap items-center justify-between h-full">
         <a href="/">
           <span className="self-center text-2xl font-semibold">
             Event Signup
