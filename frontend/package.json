@@ -19,7 +19,7 @@
     "clipboard": "^2.0.11",
     "clsx": "^2.1.1",
     "formik": "^2.4.5",
-    "lucide-react": "^0.462.0",
+    "lucide-react": "^0.474.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-query": "^3.39.3",
