@@ -4,6 +4,7 @@ import eventsPost from './api/eventsPost';
 import eventsGetById from './api/eventsGetById';
 import attendeesGetAll from './api/attendeesGetAll';
 import attendeesPut from './api/attendeesPut';
+import eventsPatch from './api/eventsPatch';
 
 /**
  *
@@ -25,6 +26,10 @@ export const eventsPostHandler = async (event: APIGatewayProxyEvent): Promise<AP
 
 export const eventsGetByIdHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     return eventsGetById(event);
+};
+
+export const eventsPatchHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    return eventsPatch(event);
 };
 
 export const attendeesGetAllHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {

@@ -132,6 +132,38 @@ Resources:
         Sourcemap: true
         EntryPoints:
           - handler.ts
+
+  updateEvent:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: event-signup-backend-patchEvents-dev
+      CodeUri: src/
+      Handler: handler.eventsPatchHandler
+      Architectures:
+        - x86_64
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /events/{id}
+            Method: patch
+      Policies:
+        - Statement:
+            - Sid: dynamoPatchEventsPolicy
+              Effect: Allow
+              Action:
+                - dynamodb:UpdateItem
+              Resource: "*"
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - handler.ts
+
   getAllAttendees:
     Type: AWS::Serverless::Function
     Properties:

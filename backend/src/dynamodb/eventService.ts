@@ -4,9 +4,10 @@ import {
     GetItemCommand,
     PutItemCommand,
     QueryCommand,
+    UpdateItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import { randomBytes, randomUUID } from 'crypto';
-import { DynamoEvent } from '../api/types';
+import { DynamoEvent, DynamoEventUpdate } from '../api/types';
 import client, { DYNAMO_TABLE_NAME } from './client';
 
 /**
@@ -90,4 +91,48 @@ export const postEvent = async (body: DynamoEvent, admin: string): Promise<strin
 
     await client.send(new PutItemCommand(itemToPut));
     return eventId;
+};
+
+export const updateEvent = async (id: string, body: DynamoEventUpdate): Promise<void> => {
+    const updateExpression: string[] = [];
+    const expressionAttributeNames: { [key: string]: string } = {};
+    const expressionAttributeValues: { [key: string]: AttributeValue } = {};
+
+    if (body.name) {
+        updateExpression.push('#N = :n');
+        expressionAttributeNames['#N'] = 'name';
+        expressionAttributeValues[':n'] = { S: body.name };
+    }
+    if (body.datetime) {
+        updateExpression.push('#DA = :da');
+        expressionAttributeNames['#DA'] = 'datetime';
+        expressionAttributeValues[':da'] = { S: body.datetime };
+    }
+    if (body.description) {
+        updateExpression.push('#DE = :de');
+        expressionAttributeNames['#DE'] = 'description';
+        expressionAttributeValues[':de'] = { S: body.description };
+    }
+    if (body.expiryTimestamp !== undefined) {
+        updateExpression.push('#E = :e');
+        expressionAttributeNames['#E'] = 'expiryTimestamp';
+        expressionAttributeValues[':e'] = { S: body.expiryTimestamp };
+    }
+
+    if (updateExpression.length === 0) {
+        throw new Error('No valid fields to update');
+    }
+
+    const params = {
+        TableName: DYNAMO_TABLE_NAME,
+        Key: {
+            PK: { S: `event_${id}` },
+            SK: { S: 'meta' },
+        },
+        UpdateExpression: `SET ${updateExpression.join(', ')}`,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+    };
+
+    await client.send(new UpdateItemCommand(params));
 };
