@@ -5,6 +5,13 @@ export type DynamoEvent = {
     expiryTimestamp: string | null;
 };
 
+export interface DynamoEventUpdate {
+    name?: string;
+    datetime?: string;
+    description?: string;
+    expiryTimestamp?: string;
+}
+
 export type Event = {
     name: string | undefined;
     datetime: string | undefined;
