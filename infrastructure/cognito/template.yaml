@@ -67,9 +67,11 @@ Resources:
       CallbackURLs:
         - https://d3da3lb7bhwbo0.cloudfront.net
         - http://localhost:5173
+        - https://xn--hppening-0za.com
       LogoutURLs:
         - https://d3da3lb7bhwbo0.cloudfront.net
         - http://localhost:5173
+        - https://xn--hppening-0za.com
       SupportedIdentityProviders:
         - COGNITO
         - Google

@@ -4,7 +4,9 @@
 
 dev:
 
-- https://d3da3lb7bhwbo0.cloudfront.net
+- https://d3da3lb7bhwbo0.cloudfront.net (Google login not configured for this Url)
+- https://häppening.com
+
 
 ## requirements
 
