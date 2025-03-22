@@ -5,7 +5,7 @@ Description: SAM Template for backend
 Globals:
   Function:
     Timeout: 29
-    Runtime: nodejs20.x
+    Runtime: nodejs22.x
     Environment:
       Variables:
         MOCK_AUTH: !Ref MockAuth
