@@ -52,3 +52,13 @@ export const addEvent = async (
     return null;
   }
 };
+
+export const patchEvent = async (id: string, data: Partial<EventDetails>): Promise<boolean> => {
+  try {
+    await instance.patch(`/events/${id}`, data);
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};

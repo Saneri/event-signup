@@ -1,7 +1,5 @@
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { addEvent } from "../services/events";
 import FormError from "./common/FormError";
 import { EventFormValues } from "./types";
 import { Button } from "@/components/ui/button";
@@ -13,16 +11,13 @@ const isNotInThePast = (value: string) => {
   return selectedDatetime >= currentDatetime;
 };
 
-const EventForm = () => {
-  const navigate = useNavigate();
+type EventFormProps = {
+  initialValues: EventFormValues;
+  onSubmit: (values: EventFormValues) => Promise<void>;
+};
 
-  const initialValues: EventFormValues = {
-    name: "",
-    datetime: "",
-    description: "",
-    expiryTimestamp: null,
-    hasExpiry: false,
-  };
+const EventForm = (props: EventFormProps) => {
+  const { initialValues, onSubmit } = props;
 
   const validationSchema = yup.object({
     name: yup.string().required().min(3),
@@ -36,21 +31,10 @@ const EventForm = () => {
       ),
   });
 
-  const submitForm = async (values: EventFormValues) => {
-    const { hasExpiry, ...valuesToSend } = values;
-    const eventId = await addEvent(valuesToSend);
-    if (!eventId) {
-      alert("Failed to create event");
-      return;
-    }
-    formik.resetForm();
-    navigate(`/events/${eventId}`);
-  };
-
   const formik = useFormik({
-    initialValues,
+    initialValues: initialValues,
     validationSchema,
-    onSubmit: submitForm,
+    onSubmit: onSubmit,
   });
 
   return (
@@ -63,6 +47,7 @@ const EventForm = () => {
         className="shadow border rounded py-2 px-3 my-1 text-gray-700"
         type="text"
         name="name"
+        value={formik.values.name}
         onChange={formik.handleChange}
       />
       <FormError error={formik.errors.name} />
@@ -71,6 +56,7 @@ const EventForm = () => {
         className="shadow border rounded py-2 px-3 my-1 text-gray-700"
         type="datetime-local"
         name="datetime"
+        value={formik.values.datetime}
         onChange={formik.handleChange}
       />
       <FormError error={formik.errors.datetime} />
@@ -78,6 +64,7 @@ const EventForm = () => {
       <textarea
         className="shadow border rounded py-2 px-3 my-1 text-gray-700"
         name="description"
+        value={formik.values.description}
         onChange={formik.handleChange}
       />
       <br />
@@ -86,6 +73,7 @@ const EventForm = () => {
         <input
           type="checkbox"
           name="hasExpiry"
+          checked={formik.values.hasExpiry}
           onChange={formik.handleChange}
         />
         <label className="my-1">Add link expiration</label>
@@ -94,6 +82,7 @@ const EventForm = () => {
         <Input
           type="datetime-local"
           name="expiryTimestamp"
+          value={formik.values.expiryTimestamp ?? undefined}
           onChange={formik.handleChange}
         />
       )}

@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar";
 import { UserProvider } from "./providers/UserProvider";
 import RegisterPage from "./pages/RegisterPage";
+import EditEventPage from "./pages/EditEventPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import { Amplify } from "aws-amplify";
 
@@ -64,6 +65,11 @@ const App = () => {
             {
               path: "/events/:id",
               element: <EventPage />,
+              loader: eventLoader,
+            },
+            {
+              path: "/events/:id/edit",
+              element: <EditEventPage />,
               loader: eventLoader,
             },
           ],
