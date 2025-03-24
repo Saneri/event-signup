@@ -25,7 +25,7 @@ Resources:
     Properties:
       StageName: dev
       Cors:
-        AllowMethods: "'GET,POST,PUT,OPTIONS'"
+        AllowMethods: "'GET,POST,PUT,PATCH,OPTIONS'"
         AllowHeaders: "'Content-Type,X-Api-Key,Authorization'"
         AllowOrigin: "'*'" # make this more strict
   ApiUsagePlan:
