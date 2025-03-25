@@ -153,6 +153,7 @@ Resources:
             - Sid: dynamoPatchEventsPolicy
               Effect: Allow
               Action:
+                - dynamodb:GetItem
                 - dynamodb:UpdateItem
               Resource: "*"
     Metadata:
