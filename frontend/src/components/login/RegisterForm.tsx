@@ -62,7 +62,7 @@ const RegisterForm = (props: Props) => {
   });
 
   return (
-    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="bg-white shadow-md rounded-sm px-8 pt-6 pb-8 mb-4">
       <form className="flex flex-col" onSubmit={formik.handleSubmit}>
         <label className="my-1">Email address</label>
         <Input type="email" name="email" onChange={formik.handleChange} />

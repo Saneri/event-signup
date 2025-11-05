@@ -55,7 +55,7 @@ const LoginForm = () => {
   });
 
   return (
-    <div className="flex flex-col bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="flex flex-col bg-white shadow-md rounded-sm px-8 pt-6 pb-8 mb-4">
       <form className="flex flex-col" onSubmit={formik.handleSubmit}>
         <label className="my-1">Username</label>
         <Input type="text" name="username" onChange={formik.handleChange} />

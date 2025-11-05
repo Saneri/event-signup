@@ -43,7 +43,7 @@ const AccountConfirmationForm = (props: Props) => {
   });
 
   return (
-    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="bg-white shadow-md rounded-sm px-8 pt-6 pb-8 mb-4">
       <form className="flex flex-col" onSubmit={formik.handleSubmit}>
         <label className="my-1">Confirmation code</label>
         <Input type="text" name="code" onChange={formik.handleChange} />
