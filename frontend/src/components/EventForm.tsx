@@ -44,7 +44,7 @@ const EventForm = (props: EventFormProps) => {
     >
       <label className="my-1">Event Name</label>
       <Input
-        className="shadow border rounded py-2 px-3 my-1 text-gray-700"
+        className="shadow-sm border rounded py-2 px-3 my-1 text-gray-700"
         type="text"
         name="name"
         value={formik.values.name}
@@ -53,7 +53,7 @@ const EventForm = (props: EventFormProps) => {
       <FormError error={formik.errors.name} />
       <label className="my-1">Date and Time</label>
       <Input
-        className="shadow border rounded py-2 px-3 my-1 text-gray-700"
+        className="shadow-sm border rounded py-2 px-3 my-1 text-gray-700"
         type="datetime-local"
         name="datetime"
         value={formik.values.datetime}
@@ -62,7 +62,7 @@ const EventForm = (props: EventFormProps) => {
       <FormError error={formik.errors.datetime} />
       <label className="my-1">Description</label>
       <textarea
-        className="shadow border rounded py-2 px-3 my-1 text-gray-700"
+        className="shadow-sm border rounded py-2 px-3 my-1 text-gray-700"
         name="description"
         value={formik.values.description}
         onChange={formik.handleChange}
