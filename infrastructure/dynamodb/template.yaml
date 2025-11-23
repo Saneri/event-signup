@@ -4,6 +4,7 @@ Resources:
     DeletionPolicy: Retain
     Properties:
       TableName: eventSignupTable
+      BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: PK
           AttributeType: S
@@ -14,9 +15,6 @@ Resources:
           KeyType: HASH
         - AttributeName: SK
           KeyType: RANGE
-      ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 1
       GlobalSecondaryIndexes:
         - IndexName: GSI1
           KeySchema:
@@ -24,8 +22,5 @@ Resources:
               KeyType: HASH
             - AttributeName: PK
               KeyType: RANGE
-          ProvisionedThroughput:
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
           Projection:
             ProjectionType: ALL
