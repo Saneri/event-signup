@@ -1,16 +1,17 @@
+import { Amplify } from "aws-amplify";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+
+import ProtectedRoute from "./auth/ProtectedRoute";
+import Navbar from "./components/Navbar";
 import BrowseEventsPage from "./pages/BrowseEventsPage";
+import CreateEventsPage from "./pages/CreateEventPage";
+import EditEventPage from "./pages/EditEventPage";
 import ErrorPage from "./pages/ErrorPage";
 import EventPage, { eventLoader } from "./pages/EventPage";
-import CreateEventsPage from "./pages/CreateEventPage";
 import LoginPage from "./pages/LoginPage";
-import Navbar from "./components/Navbar";
-import { UserProvider } from "./providers/UserProvider";
 import RegisterPage from "./pages/RegisterPage";
-import EditEventPage from "./pages/EditEventPage";
-import ProtectedRoute from "./auth/ProtectedRoute";
-import { Amplify } from "aws-amplify";
+import { UserProvider } from "./providers/UserProvider";
 
 const redirectUri = import.meta.env.VITE_LOGIN_REDIRECT_URI;
 
@@ -25,12 +26,7 @@ Amplify.configure({
           redirectSignIn: [redirectUri],
           redirectSignOut: [redirectUri],
           responseType: "code",
-          scopes: [
-            "email",
-            "profile",
-            "openid",
-            "aws.cognito.signin.user.admin",
-          ],
+          scopes: ["email", "profile", "openid", "aws.cognito.signin.user.admin"],
         },
       },
     },

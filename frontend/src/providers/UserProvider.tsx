@@ -1,16 +1,5 @@
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import {
-  fetchAuthSession,
-  AuthSession,
-  fetchUserAttributes,
-  FetchUserAttributesOutput,
-} from "aws-amplify/auth";
+import { AuthSession, fetchAuthSession, fetchUserAttributes, FetchUserAttributesOutput } from "aws-amplify/auth";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 type UserContextType = {
   user: FetchUserAttributesOutput | null;
@@ -43,11 +32,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     fetchUser();
   }, []);
 
-  return (
-    <UserContext.Provider value={{ user, session, loading, fetchUser }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ user, session, loading, fetchUser }}>{children}</UserContext.Provider>;
 }
 
 export function useUser() {

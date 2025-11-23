@@ -1,5 +1,6 @@
-import { useAuthRedirect } from "./useAuthRedirect";
 import { Outlet } from "react-router-dom";
+
+import { useAuthRedirect } from "./useAuthRedirect";
 
 const ProtectedRoute = () => {
   useAuthRedirect();

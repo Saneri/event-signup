@@ -1,8 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { confirmRegistration } from "../../auth/auth";
 import FormError from "../common/FormError";
 

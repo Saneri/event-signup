@@ -1,12 +1,13 @@
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { signIn, signInWithGoogle } from "../../auth/auth";
 import { useUser } from "../../providers/UserProvider";
 import FormError from "../common/FormError";
 import { AuthenticationError } from "./errors";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 type Login = {
   username: string;
@@ -29,10 +30,7 @@ const LoginForm = () => {
 
   const submitForm = async (values: Login) => {
     try {
-      const { emailConfirmation } = await signIn(
-        values.username,
-        values.password
-      );
+      const { emailConfirmation } = await signIn(values.username, values.password);
       if (emailConfirmation) {
         navigate("/register", { state: { username: values.username } });
       } else {

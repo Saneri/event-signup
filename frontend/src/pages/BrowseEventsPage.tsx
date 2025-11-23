@@ -1,8 +1,9 @@
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+
+import { Button } from "@/components/ui/button";
 import EventList from "../components/EventList";
 import { getEvents } from "../services/events";
-import { Button } from "@/components/ui/button";
 
 const BrowseEventsPage = () => {
   const { isLoading, error, data } = useQuery("event", getEvents);
@@ -16,11 +17,7 @@ const BrowseEventsPage = () => {
       <Link className="flex justify-left" to="/create">
         <Button>Create event</Button>
       </Link>
-      {data == null || !data.length ? (
-        <h1>No Events yet</h1>
-      ) : (
-        <EventList events={data} />
-      )}
+      {data == null || !data.length ? <h1>No Events yet</h1> : <EventList events={data} />}
     </div>
   );
 };

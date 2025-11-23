@@ -1,6 +1,7 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
-import { EventFormValues } from "@/components/types";
+
 import EventForm from "@/components/EventForm";
+import { EventFormValues } from "@/components/types";
 import { patchEvent } from "@/services/events";
 
 const EditEventPage = () => {

@@ -4,7 +4,5 @@ export const formatDateAndTime = (isoDate: string): string => {
     return "Invalid date";
   }
 
-  return `${date.toLocaleDateString("fi-FI")} ${date.toLocaleTimeString(
-    "fi-FI"
-  )}`;
+  return `${date.toLocaleDateString("fi-FI")} ${date.toLocaleTimeString("fi-FI")}`;
 };

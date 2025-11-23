@@ -1,7 +1,8 @@
-import EventForm from "../components/EventForm";
 import { useNavigate } from "react-router-dom";
-import { addEvent } from "../services/events";
+
 import { EventFormValues } from "@/components/types";
+import EventForm from "../components/EventForm";
+import { addEvent } from "../services/events";
 
 const CreateEventsPage = () => {
   const navigate = useNavigate();

@@ -2,5 +2,16 @@
   "trailingComma": "es5",
   "tabWidth": 2,
   "semi": true,
-  "singleQuote": false
+  "singleQuote": false,
+  "printWidth": 120,
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@/.*$",
+    "^(?!.*[.](css|svg)$)[./].*$",
+    "",
+    ".css$",
+    ".svg$"
+  ]
 }

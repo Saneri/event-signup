@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { editAttendee } from "../services/attendees";
+
 import { Button } from "@/components/ui/button";
+import { editAttendee } from "../services/attendees";
 
 type AttendingControlsProps = {
   onAttendingChange: () => void;
   eventId: string;
 };
 
-const AttendingControls = ({
-  onAttendingChange,
-  eventId,
-}: AttendingControlsProps) => {
+const AttendingControls = ({ onAttendingChange, eventId }: AttendingControlsProps) => {
   const [attending, setAttending] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -28,18 +26,10 @@ const AttendingControls = ({
 
   return (
     <div className="flex rounded-md space-x-2 justify-center" role="group">
-      <Button
-        onClick={() => handleClick(true)}
-        variant={attending ? "default" : "outline"}
-        disabled={loading}
-      >
+      <Button onClick={() => handleClick(true)} variant={attending ? "default" : "outline"} disabled={loading}>
         Attending ✅
       </Button>
-      <Button
-        onClick={() => handleClick(false)}
-        variant={attending ? "outline" : "default"}
-        disabled={loading}
-      >
+      <Button onClick={() => handleClick(false)} variant={attending ? "outline" : "default"} disabled={loading}>
         Not attending ❌
       </Button>
     </div>

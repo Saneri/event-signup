@@ -1,5 +1,6 @@
 import ClipboardJS from "clipboard";
 import { useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 
 type InvitationLinkProps = {
@@ -15,9 +16,7 @@ const InvitationLink = (props: InvitationLinkProps) => {
 
   return (
     <div>
-      <h3>
-        Send to following link to anyone you want to invite to this event.
-      </h3>
+      <h3>Send to following link to anyone you want to invite to this event.</h3>
       <div id="link" className="break-all">
         {invitationLink}
       </div>

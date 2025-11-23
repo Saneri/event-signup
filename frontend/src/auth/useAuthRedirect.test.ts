@@ -1,8 +1,9 @@
 import { renderHook } from "@testing-library/react";
 import { useNavigate } from "react-router-dom";
-import { useAuthRedirect } from "./useAuthRedirect";
-import { useUser } from "../providers/UserProvider";
 import { Mock } from "vitest";
+
+import { useUser } from "../providers/UserProvider";
+import { useAuthRedirect } from "./useAuthRedirect";
 
 /**
  * @vitest-environment jsdom

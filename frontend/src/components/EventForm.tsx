@@ -1,9 +1,10 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
-import FormError from "./common/FormError";
-import { EventFormValues } from "./types";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import FormError from "./common/FormError";
+import { EventFormValues } from "./types";
 
 const isNotInThePast = (value: string) => {
   const selectedDatetime = new Date(value);
@@ -24,11 +25,7 @@ const EventForm = (props: EventFormProps) => {
     datetime: yup
       .string()
       .required()
-      .test(
-        "is-not-in-the-past",
-        "The date and time cannot be in the past",
-        isNotInThePast
-      ),
+      .test("is-not-in-the-past", "The date and time cannot be in the past", isNotInThePast),
   });
 
   const formik = useFormik({
@@ -38,10 +35,7 @@ const EventForm = (props: EventFormProps) => {
   });
 
   return (
-    <form
-      className="flex flex-col bg-white shadow-md rounded-sm px-8 pt-6 pb-8 mb-4"
-      onSubmit={formik.handleSubmit}
-    >
+    <form className="flex flex-col bg-white shadow-md rounded-sm px-8 pt-6 pb-8 mb-4" onSubmit={formik.handleSubmit}>
       <label className="my-1">Event Name</label>
       <Input
         className="shadow-sm border rounded-sm py-2 px-3 my-1 text-gray-700"
@@ -70,12 +64,7 @@ const EventForm = (props: EventFormProps) => {
       <br />
       <div></div>
       <div className="flex items-center gap-1">
-        <input
-          type="checkbox"
-          name="hasExpiry"
-          checked={formik.values.hasExpiry}
-          onChange={formik.handleChange}
-        />
+        <input type="checkbox" name="hasExpiry" checked={formik.values.hasExpiry} onChange={formik.handleChange} />
         <label className="my-1">Add link expiration</label>
       </div>
       {formik.values.hasExpiry && (

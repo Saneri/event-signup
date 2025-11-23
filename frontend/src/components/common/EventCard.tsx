@@ -1,9 +1,10 @@
+import { CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
-import { formatDateAndTime } from "../../utils/date";
-import { Event } from "../types";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarDays } from "lucide-react";
+import { formatDateAndTime } from "../../utils/date";
+import { Event } from "../types";
 
 type Props = {
   event: Event;

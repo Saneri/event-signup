@@ -1,14 +1,14 @@
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
-import AttendingControls from "../components/AttendingControls";
-import AttendeeList from "../components/AttendeeList";
-import { Attendee, EventDetails } from "../components/types";
-import { getEvent } from "../services/events";
-import { getAttendees } from "../services/attendees";
-import { formatDateAndTime } from "../utils/date";
 import { useState } from "react";
+import { LoaderFunctionArgs, useLoaderData, useNavigate } from "react-router-dom";
+
 import InvitationLink from "@/components/InvitationLink";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import AttendeeList from "../components/AttendeeList";
+import AttendingControls from "../components/AttendingControls";
+import { Attendee, EventDetails } from "../components/types";
+import { getAttendees } from "../services/attendees";
+import { getEvent } from "../services/events";
+import { formatDateAndTime } from "../utils/date";
 
 type Args = LoaderFunctionArgs<{
   id: string;
@@ -51,23 +51,15 @@ const EventPage = () => {
       {event.admin && (
         <div className="flex flex-col gap-2">
           <h2>Admin section</h2>
-          {event.invitationKey && (
-            <InvitationLink invitationKey={event.invitationKey} />
-          )}
-          <Button
-            className="w-fit"
-            onClick={() => navigate(`/events/${eventId}/edit`)}
-          >
+          {event.invitationKey && <InvitationLink invitationKey={event.invitationKey} />}
+          <Button className="w-fit" onClick={() => navigate(`/events/${eventId}/edit`)}>
             Edit event
           </Button>
         </div>
       )}
       <br />
       <div className=" bg-white shadow-md rounded-sm px-8 pt-6 pb-8 mb-4">
-        <AttendingControls
-          onAttendingChange={refreshParticipants}
-          eventId={eventId}
-        />
+        <AttendingControls onAttendingChange={refreshParticipants} eventId={eventId} />
       </div>
     </div>
   );

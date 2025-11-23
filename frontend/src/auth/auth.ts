@@ -1,12 +1,13 @@
-import { AuthenticationError } from "../components/login/errors";
 import {
   signIn as amplifySignIn,
-  getCurrentUser,
   AuthUser,
-  signUp,
   confirmSignUp,
+  getCurrentUser,
   signInWithRedirect,
+  signUp,
 } from "aws-amplify/auth";
+
+import { AuthenticationError } from "../components/login/errors";
 
 const PICTURE_PLACEHOLDER_STRING = "placeholder";
 
@@ -14,10 +15,7 @@ type SignInOutcome = {
   emailConfirmation: boolean;
 };
 
-export async function signIn(
-  username: string,
-  password: string
-): Promise<SignInOutcome> {
+export async function signIn(username: string, password: string): Promise<SignInOutcome> {
   try {
     const { nextStep } = await amplifySignIn({
       username,
@@ -46,11 +44,7 @@ export async function fetchCurrentUser(): Promise<AuthUser | null> {
   }
 }
 
-export async function registerNewUser(
-  email: string,
-  password: string,
-  nickname: string
-): Promise<void> {
+export async function registerNewUser(email: string, password: string, nickname: string): Promise<void> {
   await signUp({
     username: email,
     password,
@@ -64,10 +58,7 @@ export async function registerNewUser(
   });
 }
 
-export async function confirmRegistration(
-  username: string,
-  confirmationCode: string
-): Promise<void> {
+export async function confirmRegistration(username: string, confirmationCode: string): Promise<void> {
   confirmSignUp({ username, confirmationCode });
 }
 

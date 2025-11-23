@@ -1,6 +1,7 @@
+import { useState } from "react";
+
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useState } from "react";
 import EventCard from "./common/EventCard";
 import { Event } from "./types";
 import { Card } from "./ui/card";
@@ -13,9 +14,7 @@ const EventList = (props: Props) => {
   const now = new Date().toISOString();
   const [showPastEvents, setShowPastEvents] = useState<boolean>(false);
 
-  const filteredEvents = showPastEvents
-    ? props.events
-    : props.events.filter((event) => event.datetime >= now);
+  const filteredEvents = showPastEvents ? props.events : props.events.filter((event) => event.datetime >= now);
 
   return (
     <Card className="p-4">

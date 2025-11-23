@@ -1,14 +1,13 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
+
 import AccountConfirmationForm from "../components/login/AccountConfirmationForm";
 import RegisterForm from "../components/login/RegisterForm";
-import { useLocation } from "react-router-dom";
 
 const RegisterPage = () => {
   const location = useLocation();
   const username = location.state?.username;
-  const [emailToConfirm, setEmailToConfirm] = useState<string | undefined>(
-    username
-  );
+  const [emailToConfirm, setEmailToConfirm] = useState<string | undefined>(username);
 
   if (emailToConfirm) {
     return (

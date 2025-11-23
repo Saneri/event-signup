@@ -1,10 +1,11 @@
-import * as yup from "yup";
-import FormError from "../common/FormError";
 import { useFormik } from "formik";
-import { registerNewUser } from "../../auth/auth";
 import { Dispatch, SetStateAction } from "react";
+import * as yup from "yup";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { registerNewUser } from "../../auth/auth";
+import FormError from "../common/FormError";
 
 type Props = {
   setEmailToConfirm: Dispatch<SetStateAction<string | undefined>>;
@@ -32,10 +33,7 @@ const RegisterForm = (props: Props) => {
       .matches(/[A-Z]/, "Must contain an uppercase character")
       .matches(/[a-z]/, "Must contain a lowercase character")
       .matches(/\d/, "Must contain a number")
-      .matches(
-        /[!@#\$%\^&\*()\[\]\{\}\?\-"!@#%&\/\\,><':;\|_~`\+=\.]/,
-        "Must contain a symbol"
-      )
+      .matches(/[!@#\$%\^&\*()\[\]\{\}\?\-"!@#%&\/\\,><':;\|_~`\+=\.]/, "Must contain a symbol")
       .min(8, "Password must be at least 8 characters")
 
       .required("required field"),
@@ -81,11 +79,7 @@ const RegisterForm = (props: Props) => {
         <Input type="password" name="password" onChange={formik.handleChange} />
         <FormError error={formik.errors.password} />
         <label className="my-1">Enter password again</label>
-        <Input
-          type="password"
-          name="repeatPassword"
-          onChange={formik.handleChange}
-        />
+        <Input type="password" name="repeatPassword" onChange={formik.handleChange} />
         <FormError error={formik.errors.repeatPassword} />
         <Button className="mt-2" type="submit">
           Create a new account
